@@ -9,10 +9,6 @@ import {
   ShieldCheck,
   Fuel,
   Check,
-  FileText,
-  Calendar,
-  Layers,
-  Sparkles,
   X,
 } from "lucide-react";
 
@@ -27,7 +23,7 @@ export default function VehiclesPage() {
     brand: "Toyota",
     model: "Fortuner VRZ",
     year: 2023,
-    color: "Attitude Black",
+    color: "Hitam",
     plate: "B 9999 PRO",
     fuelLevel: 75,
     type: "SUV" as const,
@@ -53,87 +49,80 @@ export default function VehiclesPage() {
   };
 
   return (
-    <div className="p-4 sm:p-8 max-w-4xl mx-auto w-full space-y-6">
+    <div className="p-4 sm:p-8 max-w-3xl mx-auto w-full space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
             Kendaraan Terdaftar
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
-            Mobil yang telah diverifikasi STNK dan siap diambil alih oleh Driver Trobos.
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Mobil yang siap diambil alih oleh Driver Trobos saat Anda terjebak macet.
           </p>
         </div>
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#FF5500] hover:bg-[#E64C00] text-white text-xs font-bold shadow-emergency transition active:scale-95 shrink-0"
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-sm"
         >
           <Plus className="w-4 h-4" />
-          <span>Tambah Kendaraan Baru</span>
+          <span>Tambah Mobil</span>
         </button>
       </div>
 
-      {/* Grid of Registered Vehicles */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         {vehicles.map((v) => {
           const isActive = v.id === activeVehicleId;
           return (
             <div
               key={v.id}
               onClick={() => setActiveVehicleId(v.id)}
-              className={`rounded-3xl p-5 border transition-all cursor-pointer relative shadow-lg ${
+              className={`rounded-2xl p-4 border transition cursor-pointer relative shadow-sm ${
                 isActive
-                  ? "bg-slate-800/90 border-[#FF5500] ring-1 ring-[#FF5500]"
-                  : "bg-slate-800/60 border-slate-700/70 hover:border-slate-600"
+                  ? "bg-white border-[#FF4D00] ring-1 ring-[#FF4D00]"
+                  : "bg-white border-slate-200 hover:border-slate-300"
               }`}
             >
-              {/* Active Badge */}
               {isActive && (
-                <span className="absolute top-4 right-4 px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                <span className="absolute top-3.5 right-3.5 px-2 py-0.5 rounded-full bg-orange-50 text-[#FF4D00] border border-orange-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
                   <Check className="w-3 h-3" /> Mobil Utama
                 </span>
               )}
 
-              <div className="flex items-center gap-3.5 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-slate-700/80 border border-slate-600 flex items-center justify-center text-orange-400">
-                  <Car className="w-6 h-6" />
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700">
+                  <Car className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white leading-tight">
+                  <h3 className="text-sm font-bold text-slate-900">
                     {v.brand} {v.model}
                   </h3>
-                  <div className="text-xs text-slate-400 mt-0.5">
+                  <div className="text-xs text-slate-500">
                     {v.color} • {v.year}
                   </div>
                 </div>
               </div>
 
-              {/* Specs & Plate */}
-              <div className="space-y-2 text-xs bg-slate-900/60 p-3.5 rounded-2xl border border-slate-700/50">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Nomor Plat Polisi</span>
-                  <span className="font-mono font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
+              <div className="space-y-1.5 text-xs bg-slate-50 p-3 rounded-xl border border-slate-200/80">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Plat Polisi</span>
+                  <span className="font-mono font-bold text-slate-900 bg-white px-1.5 py-0.5 rounded border border-slate-200">
                     {v.plate}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Tipe & Transmisi</span>
-                  <span className="font-semibold text-slate-200">
-                    {v.type} ({v.transmission})
-                  </span>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Transmisi</span>
+                  <span className="font-semibold text-slate-800">{v.transmission}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Level BBM Terakhir</span>
-                  <span className="font-semibold text-amber-400 flex items-center gap-1">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Level BBM</span>
+                  <span className="font-semibold text-amber-700 flex items-center gap-1">
                     <Fuel className="w-3 h-3" /> {v.fuelLevel}%
                   </span>
                 </div>
-                <div className="pt-2 border-t border-slate-700/60 flex justify-between items-center text-[11px]">
-                  <span className="text-slate-400 flex items-center gap-1">
-                    <FileText className="w-3 h-3 text-slate-400" /> STNK Digital
-                  </span>
-                  <span className="font-bold text-emerald-400 flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5" /> Terverifikasi Asli
+                <div className="pt-1.5 border-t border-slate-200 flex justify-between text-[11px] text-emerald-700 font-semibold">
+                  <span className="flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" /> STNK Terverifikasi
                   </span>
                 </div>
               </div>
@@ -142,134 +131,81 @@ export default function VehiclesPage() {
         })}
       </div>
 
-      {/* Add Vehicle Modal */}
+      {/* Add Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 text-white shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-5 text-slate-900 shadow-xl relative">
             <button
               onClick={() => setIsAddModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full bg-slate-800"
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-2 mb-4">
-              <Car className="w-5 h-5 text-orange-400" />
-              <h3 className="text-lg font-bold text-white">
-                Daftarkan Kendaraan Baru
-              </h3>
-            </div>
+            <h3 className="text-base font-bold text-slate-900 mb-3">
+              Daftarkan Kendaraan Baru
+            </h3>
 
-            <form onSubmit={handleSaveVehicle} className="space-y-3.5 text-xs">
-              <div className="grid grid-cols-2 gap-2.5">
+            <form onSubmit={handleSaveVehicle} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-slate-400 mb-1">Merek Mobil</label>
+                  <label className="block text-slate-500 mb-1">Merek</label>
                   <input
                     type="text"
                     required
                     value={formData.brand}
-                    onChange={(e) =>
-                      setFormData({ ...formData, brand: e.target.value })
-                    }
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white"
+                    onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-900"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Model & Varian</label>
+                  <label className="block text-slate-500 mb-1">Model</label>
                   <input
                     type="text"
                     required
                     value={formData.model}
-                    onChange={(e) =>
-                      setFormData({ ...formData, model: e.target.value })
-                    }
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white"
+                    onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-900"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-slate-400 mb-1">Nomor Plat (B 1234 XYZ)</label>
+                  <label className="block text-slate-500 mb-1">Plat Polisi</label>
                   <input
                     type="text"
                     required
                     value={formData.plate}
-                    onChange={(e) =>
-                      setFormData({ ...formData, plate: e.target.value })
-                    }
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono uppercase"
+                    onChange={(e) => setFormData({ ...formData, plate: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-900 font-mono uppercase"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 mb-1">Tahun Kendaraan</label>
+                  <label className="block text-slate-500 mb-1">Tahun</label>
                   <input
                     type="number"
                     required
                     value={formData.year}
-                    onChange={(e) =>
-                      setFormData({ ...formData, year: Number(e.target.value) })
-                    }
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white"
+                    onChange={(e) => setFormData({ ...formData, year: Number(e.target.value) })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-900"
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="block text-slate-400 mb-1">Tipe Bodi</label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        type: e.target.value as any,
-                      })
-                    }
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white"
-                  >
-                    <option value="Sedan">Sedan</option>
-                    <option value="SUV">SUV</option>
-                    <option value="MPV">MPV</option>
-                    <option value="Hatchback">Hatchback</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-slate-400 mb-1">Transmisi</label>
-                  <select
-                    value={formData.transmission}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        transmission: e.target.value as any,
-                      })
-                    }
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-white"
-                  >
-                    <option value="Automatic">Automatic (Matic)</option>
-                    <option value="Manual">Manual</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-2 text-emerald-300">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Dokumen STNK otomatis diverifikasi oleh sistem Trobos.</span>
               </div>
 
               <div className="pt-2 flex gap-2">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="w-1/2 py-2.5 rounded-xl border border-slate-700 text-slate-400 hover:text-white"
+                  className="w-1/2 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="w-1/2 py-2.5 rounded-xl bg-[#FF5500] hover:bg-[#E64C00] text-white font-bold"
+                  className="w-1/2 py-2.5 rounded-xl bg-slate-900 text-white font-bold"
                 >
-                  Simpan Mobil
+                  Simpan
                 </button>
               </div>
             </form>

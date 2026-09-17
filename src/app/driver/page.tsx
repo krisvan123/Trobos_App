@@ -4,18 +4,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import {
   Car,
-  Power,
   Navigation,
   CheckCircle,
-  XCircle,
   MapPin,
-  Clock,
-  ArrowRight,
-  ShieldCheck,
-  Fuel,
   ArrowLeft,
-  DollarSign,
-  AlertCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { formatRupiah } from "@/lib/formatters";
 
@@ -58,226 +51,197 @@ export default function DriverDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 sm:px-6 h-16 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 sm:px-6 h-16 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           <Link
             href="/app"
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition flex items-center gap-1.5 text-xs font-bold"
+            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5 text-xs font-bold"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Mode Pengguna</span>
           </Link>
-          <div className="h-4 w-px bg-slate-800" />
-          <div className="flex items-center gap-2">
-            <span className="text-base font-black tracking-tight text-white">
-              Trobos Pilot
-            </span>
-            <span className="text-[10px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold uppercase">
-              Driver Partner
+          <div className="h-4 w-px bg-slate-200" />
+          <div className="flex items-center gap-1.5">
+            <span className="text-base font-black tracking-tight text-slate-900">
+              Trobos Driver Pilot
             </span>
           </div>
         </div>
 
-        {/* Online / Offline Toggle Switch */}
+        {/* Online / Offline Toggle */}
         <button
           onClick={() => setIsOnline(!isOnline)}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full font-bold text-xs transition-all ${
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full font-bold text-xs transition ${
             isOnline
-              ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
-              : "bg-slate-800 text-slate-400 border border-slate-700"
+              ? "bg-emerald-50 text-emerald-700 border border-emerald-300"
+              : "bg-slate-100 text-slate-500 border border-slate-200"
           }`}
         >
           <span
             className={`w-2 h-2 rounded-full ${
-              isOnline ? "bg-emerald-400 animate-ping" : "bg-slate-500"
+              isOnline ? "bg-emerald-500" : "bg-slate-400"
             }`}
           />
           <span>{isOnline ? "ONLINE (SIAGA)" : "OFFLINE"}</span>
         </button>
       </header>
 
-      {/* Main Driver Content */}
-      <main className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6 space-y-6">
-        {/* Earnings & Stats Card */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <div className="p-4 rounded-3xl bg-slate-900/80 border border-slate-800">
-            <div className="text-[11px] text-slate-400 font-semibold uppercase">
-              Pendapatan Bersih Hari Ini
-            </div>
-            <div className="text-xl sm:text-2xl font-black text-emerald-400 mt-1">
+      {/* Main Content */}
+      <main className="flex-1 max-w-2xl w-full mx-auto p-4 sm:p-6 space-y-5">
+        {/* Earnings Summary */}
+        <div className="grid grid-cols-3 gap-2.5">
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div className="text-[11px] text-slate-500 font-medium">Pendapatan Hari Ini</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">
               {formatRupiah(earningsToday)}
             </div>
           </div>
-
-          <div className="p-4 rounded-3xl bg-slate-900/80 border border-slate-800">
-            <div className="text-[11px] text-slate-400 font-semibold uppercase">
-              Misi Trobos Selesai
-            </div>
-            <div className="text-xl sm:text-2xl font-black text-white mt-1">
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div className="text-[11px] text-slate-500 font-medium">Misi Selesai</div>
+            <div className="text-lg font-black text-slate-900 mt-0.5">
               {tripsCompleted} Trip
             </div>
           </div>
-
-          <div className="p-4 rounded-3xl bg-slate-900/80 border border-slate-800 col-span-2 sm:col-span-1">
-            <div className="text-[11px] text-slate-400 font-semibold uppercase">
-              Rating Pengemudi
-            </div>
-            <div className="text-xl sm:text-2xl font-black text-amber-400 mt-1">
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div className="text-[11px] text-slate-500 font-medium">Rating Pilot</div>
+            <div className="text-lg font-black text-amber-600 mt-0.5">
               ★ 4.95
             </div>
           </div>
         </div>
 
-        {/* INCOMING EMERGENCY REQUEST POPUP */}
+        {/* INCOMING EMERGENCY ORDER POPUP */}
         {isOnline && hasIncoming && driverState === "IDLE" && (
-          <div className="p-6 rounded-3xl bg-gradient-to-b from-orange-950/60 to-slate-900 border-2 border-[#FF5500] shadow-2xl relative overflow-hidden animate-pulse-subtle">
-            <div className="flex items-center justify-between pb-3 border-b border-orange-500/30">
+          <div className="p-5 rounded-3xl bg-white border-2 border-[#FF4D00] shadow-xl space-y-3.5">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-orange-500 animate-ping" />
-                <span className="text-xs font-black text-orange-400 uppercase tracking-wider">
-                  Permintaan Evakuasi Masuk!
+                <span className="w-2.5 h-2.5 rounded-full bg-[#FF4D00] animate-pulse" />
+                <span className="text-xs font-black text-[#FF4D00] uppercase">
+                  Permintaan Evakuasi Masuk
                 </span>
               </div>
-              <span className="text-xs font-bold text-white bg-orange-600 px-2.5 py-0.5 rounded-full">
-                Jarak Jemput ~800m
+              <span className="text-[11px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
+                Jemput: ~800m (3 mnt)
               </span>
             </div>
 
-            {/* Fare & Vehicle Details */}
-            <div className="my-4 space-y-3">
-              <div className="flex justify-between items-baseline">
-                <div>
-                  <div className="text-xs text-slate-400">Tarif Bagian Driver</div>
-                  <div className="text-3xl font-black text-white">Rp 75.000</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-slate-400">Kendaraan Pengguna</div>
-                  <div className="text-sm font-bold text-amber-300">
-                    Honda Civic RS (Matic)
-                  </div>
-                  <div className="font-mono text-xs text-slate-300">B 1234 XYZ</div>
-                </div>
+            <div className="flex justify-between items-baseline">
+              <div>
+                <div className="text-[11px] text-slate-500 font-medium">Tarif Bagian Driver</div>
+                <div className="text-2xl font-black text-slate-900">Rp 75.000</div>
               </div>
-
-              {/* Route snippet */}
-              <div className="p-3 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-2 text-xs">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#FF5500]" />
-                  <span className="text-slate-300">
-                    Jemput: <strong>Jl. Jenderal Sudirman Kav. 28 (Mayapada Tower)</strong>
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-slate-300">
-                    Antar Mobil: <strong>Pacific Place / SCBD Lot 8</strong>
-                  </span>
-                </div>
+              <div className="text-right text-xs">
+                <div className="font-bold text-slate-900">Honda Civic (Matic)</div>
+                <div className="text-slate-500 font-mono">B 1234 XYZ</div>
               </div>
             </div>
 
-            {/* Action Buttons: Accept / Decline */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1.5">
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <MapPin className="w-3.5 h-3.5 text-[#FF4D00] shrink-0" />
+                <span>Titik Jemput: <strong>Jl. Sudirman Kav. 28</strong></span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Tujuan: <strong>Pacific Place / SCBD</strong></span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5 pt-1">
               <button
                 type="button"
                 onClick={handleDecline}
-                className="py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition"
+                className="py-3 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition"
               >
-                Tolak Permintaan
+                Tolak
               </button>
               <button
                 type="button"
                 onClick={handleAccept}
-                className="py-3.5 rounded-2xl bg-[#FF5500] hover:bg-[#E64C00] text-white font-black text-sm shadow-emergency transition flex items-center justify-center gap-1.5 active:scale-95"
+                className="py-3 rounded-xl bg-[#FF4D00] hover:bg-[#E64400] text-white font-black text-xs shadow-sm transition"
               >
-                <CheckCircle className="w-4 h-4" />
-                <span>TERIMA MISI</span>
+                Terima Misi
               </button>
             </div>
           </div>
         )}
 
-        {/* ACTIVE DRIVER MISSION STATES */}
+        {/* ACTIVE STATES */}
         {driverState === "ACCEPTED" && (
-          <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+          <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Navigation className="w-5 h-5 text-orange-400 animate-spin-slow" />
-                Menuju Titik Penjemputan Pengguna
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <Navigation className="w-4 h-4 text-orange-600" />
+                <span>Menuju Lokasi Pengguna (Sudirman Kav. 28)</span>
               </h3>
-              <span className="text-xs text-orange-400 font-bold">ETA 3 Mnt</span>
+              <span className="text-xs font-bold text-orange-600">3 mnt</span>
             </div>
-            <p className="text-xs text-slate-400">
-              Anda berboncengan dengan Rider Rizky Pratama menuju lokasi Andi Pratama di Jl. Sudirman Kav. 28.
+            <p className="text-xs text-slate-500">
+              Anda berboncengan bersama Rider Rizky menuju lokasi pengguna.
             </p>
             <button
               onClick={handleArrived}
-              className="w-full py-3.5 rounded-2xl bg-[#FF5500] text-white font-bold text-xs shadow-emergency"
+              className="w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs"
             >
-              Konfirmasi: Telah Sampai di Titik Jemput
+              Sampai di Titik Jemput
             </button>
           </div>
         )}
 
         {driverState === "ARRIVED" && (
-          <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
-              Proses Handover Mobil Pengguna
+          <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>Proses Serah Terima Kunci Mobil</span>
             </h3>
-            <div className="p-3 bg-slate-800/80 rounded-2xl text-xs space-y-1">
-              <div>Kode PIN Pengguna Terverifikasi: <strong>4821 (MATCH)</strong></div>
-              <div>Checklist 5 Sudut: <strong>Lengkap & Tervalidasi</strong></div>
-              <div>BBM Tercatat: <strong>65% (Pertamax Turbo)</strong></div>
-            </div>
-            <p className="text-xs text-slate-300">
-              Rider Rizky telah membawa pengguna meluncur ke SCBD. Sekarang saatnya Anda mengemudikan mobil pengguna ke tujuan.
+            <p className="text-xs text-slate-500">
+              Kode PIN Pengguna (4821) cocok. Rider membawa pengguna menembus macet. Silakan kemudikan mobil pengguna ke SCBD.
             </p>
             <button
               onClick={handleStartTransit}
-              className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-lg"
+              className="w-full py-3 rounded-2xl bg-[#FF4D00] text-white font-bold text-xs shadow-sm"
             >
-              Mulai Kendarai Mobil Menuju SCBD
+              Mulai Kendarai Mobil ke Tujuan
             </button>
           </div>
         )}
 
         {driverState === "IN_TRANSIT" && (
-          <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Car className="w-5 h-5 text-amber-400" />
-              Sedang Mengemudikan Mobil Pengguna ke SCBD
+          <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+              <Car className="w-4 h-4 text-amber-600" />
+              <span>Sedang Mengemudi ke Lobi SCBD</span>
             </h3>
-            <p className="text-xs text-slate-300">
-              Kamera telemetri aktif. Tetap di jalur arteri dan patuhi batas kecepatan demi keselamatan.
+            <p className="text-xs text-slate-500">
+              Mobil pengguna terlindungi asuransi. Patuhi rambu lalu lintas di jalur arteri.
             </p>
             <button
               onClick={handleComplete}
-              className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs"
+              className="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs"
             >
-              Sampai di Lobi SCBD & Serahkan Kunci
+              Sampai di Tujuan & Serahkan Kunci
             </button>
           </div>
         )}
 
         {driverState === "COMPLETED" && (
-          <div className="p-6 rounded-3xl bg-emerald-950/40 border border-emerald-800 text-center space-y-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 text-center shadow-sm space-y-3">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
               <CheckCircle className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-black text-white">
-              Misi Selesai! Saldo +Rp 75.000
+            <h3 className="text-base font-black text-slate-900">
+              Misi Selesai! Saldo Bertambah +Rp 75.000
             </h3>
-            <p className="text-xs text-slate-300">
-              Mobil telah diserahterimakan dengan selamat kepada Andi Pratama di SCBD.
+            <p className="text-xs text-slate-500">
+              Mobil telah diserahterimakan dengan selamat kepada pengguna di SCBD.
             </p>
             <button
               onClick={handleReset}
-              className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold"
+              className="px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold"
             >
-              Kembali Siaga Misi Berikutnya
+              Kembali Siaga
             </button>
           </div>
         )}

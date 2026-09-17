@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Zap, User, Phone, Mail, Lock, CheckCircle, ArrowRight } from "lucide-react";
+import { Zap, User, Phone, Mail, Lock, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -12,7 +12,6 @@ export default function RegisterPage() {
     phone: "081234567890",
     email: "andi.pratama@gmail.com",
     password: "••••••••",
-    confirmPassword: "••••••••",
     agreeTerms: true,
   });
 
@@ -22,21 +21,18 @@ export default function RegisterPage() {
   const onboardingScreens = [
     {
       title: "Escape the Traffic",
-      subtitle: "Trobos kemacetan total dengan rider motor bersertifikasi.",
+      subtitle: "Trobos kemacetan dengan rider motor terlatih yang membawa Anda ke tujuan.",
       icon: "🏍️",
-      accent: "bg-sky-500/20 text-sky-400 border-sky-500/30",
     },
     {
       title: "Your Car Is Still Safe",
-      subtitle: "Driver profesional mengambil alih mobil Anda dengan asuransi all-risk Rp 1 Miliar.",
+      subtitle: "Driver profesional mengambil alih mobil Anda dan mengemudikannya dengan aman.",
       icon: "🚗",
-      accent: "bg-amber-500/20 text-amber-400 border-amber-500/30",
     },
     {
       title: "One Tap. Two Drivers. One Destination.",
-      subtitle: "Reuni kembali di tujuan dengan mobil terparkir aman dan waktu terselamatkan.",
+      subtitle: "Anda dan mobil Anda akhirnya bertemu kembali di tempat tujuan.",
       icon: "⚡",
-      accent: "bg-orange-500/20 text-orange-400 border-orange-500/30",
     },
   ];
 
@@ -45,7 +41,7 @@ export default function RegisterPage() {
     setStep("onboarding");
   };
 
-  const handleNextOnboarding = () => {
+  const handleNext = () => {
     if (onboardingIndex < onboardingScreens.length - 1) {
       setOnboardingIndex((i) => i + 1);
     } else {
@@ -54,183 +50,162 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col justify-center items-center p-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none" />
-
-      <div className="w-full max-w-md z-10 space-y-6">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-center items-center p-4">
+      <div className="w-full max-w-sm space-y-6">
         {step === "form" ? (
           <>
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <Link href="/" className="inline-flex items-center gap-2 mb-2 group">
-                <div className="w-11 h-11 rounded-2xl bg-[#FF5500] flex items-center justify-center shadow-emergency group-hover:scale-105 transition">
-                  <Zap className="w-6 h-6 text-white fill-white" />
+            <div className="text-center space-y-1.5">
+              <Link href="/" className="inline-flex items-center gap-2 mb-2">
+                <div className="w-10 h-10 rounded-2xl bg-[#FF4D00] flex items-center justify-center shadow-sm">
+                  <Zap className="w-5 h-5 text-white fill-white" />
                 </div>
-                <span className="text-2xl font-black tracking-tight text-white">
+                <span className="text-2xl font-black tracking-tight text-slate-900">
                   TROBOS
                 </span>
               </Link>
-              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                 Buat Akun Baru
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400">
-                Daftar sekarang untuk perlindungan mobilitas darurat Anda.
+              <p className="text-xs text-slate-500">
+                Daftar untuk perlindungan evakuasi kemacetan Anda.
               </p>
             </div>
 
-            {/* Register Card */}
-            <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
-              <form onSubmit={handleSubmit} className="space-y-3.5">
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+              <form onSubmit={handleSubmit} className="space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Nama Lengkap
                   </label>
                   <div className="relative">
-                    <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       required
                       value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                      className="w-full bg-slate-800/80 border border-slate-700 rounded-2xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-[#FF5500]"
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-slate-900"
                     />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2.5">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Nomor WhatsApp
-                    </label>
-                    <div className="relative">
-                      <Phone className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-                      <input
-                        type="tel"
-                        required
-                        value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
-                        className="w-full bg-slate-800/80 border border-slate-700 rounded-2xl pl-9 pr-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#FF5500]"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Email
-                    </label>
-                    <div className="relative">
-                      <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                        className="w-full bg-slate-800/80 border border-slate-700 rounded-2xl pl-9 pr-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#FF5500]"
-                      />
-                    </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Password
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Nomor Telepon
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
-                      type="password"
+                      type="tel"
                       required
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
-                      className="w-full bg-slate-800/80 border border-slate-700 rounded-2xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-[#FF5500]"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-slate-900"
                     />
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2 pt-1">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Email
+                  </label>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-slate-900"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="password"
+                      required
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-slate-900"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1 text-xs text-slate-600">
                   <input
                     type="checkbox"
                     id="terms"
                     required
                     checked={formData.agreeTerms}
-                    onChange={(e) =>
-                      setFormData({ ...formData, agreeTerms: e.target.checked })
-                    }
-                    className="mt-0.5 accent-[#FF5500]"
+                    onChange={(e) => setFormData({ ...formData, agreeTerms: e.target.checked })}
+                    className="accent-[#FF4D00]"
                   />
-                  <label htmlFor="terms" className="text-[11px] text-slate-400 leading-tight">
-                    Saya menyetujui <span className="text-orange-400 underline">Terms & Conditions</span> serta kebijakan proteksi asuransi Trobos.
+                  <label htmlFor="terms" className="text-[11px]">
+                    Saya menyetujui Syarat Layanan dan Kebijakan Asuransi Trobos.
                   </label>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-2xl bg-[#FF5500] hover:bg-[#E64C00] active:scale-[0.99] text-white font-black text-sm tracking-wide shadow-emergency transition flex items-center justify-center gap-2 mt-2"
+                  className="w-full py-3.5 rounded-xl bg-[#FF4D00] hover:bg-[#E64400] text-white font-bold text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-1.5 mt-2"
                 >
-                  <span>Buat Akun & Lanjut</span>
+                  <span>Daftar & Mulai</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
 
-              <div className="mt-5 text-center text-xs text-slate-400">
+              <div className="mt-4 text-center text-xs text-slate-500">
                 Sudah punya akun?{" "}
-                <Link
-                  href="/login"
-                  className="text-orange-400 hover:text-orange-300 font-bold"
-                >
+                <Link href="/login" className="text-[#FF4D00] font-bold hover:underline">
                   Masuk di sini
                 </Link>
               </div>
             </div>
           </>
         ) : (
-          /* ONBOARDING MODAL (MAX 3 SCREENS) */
-          <div className="bg-slate-900/95 border border-slate-800 rounded-3xl p-8 shadow-2xl backdrop-blur-xl text-center space-y-6">
-            <div className="flex justify-center gap-1.5 mb-2">
+          /* Simple 3-step Onboarding */
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm text-center space-y-5">
+            <div className="flex justify-center gap-1">
               {onboardingScreens.map((_, i) => (
                 <div
                   key={i}
-                  className={`h-1.5 rounded-full transition-all ${
-                    onboardingIndex === i ? "w-8 bg-[#FF5500]" : "w-2 bg-slate-700"
+                  className={`h-1 rounded-full transition-all ${
+                    onboardingIndex === i ? "w-6 bg-[#FF4D00]" : "w-2 bg-slate-200"
                   }`}
                 />
               ))}
             </div>
 
-            <div className="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-inner border border-white/10 bg-slate-800">
+            <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl bg-slate-50 border border-slate-200">
               {onboardingScreens[onboardingIndex].icon}
             </div>
 
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-orange-400 mb-1">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
                 Langkah {onboardingIndex + 1} dari 3
               </div>
-              <h2 className="text-2xl font-black text-white tracking-tight">
+              <h2 className="text-xl font-black text-slate-900">
                 {onboardingScreens[onboardingIndex].title}
               </h2>
-              <p className="text-xs text-slate-300 mt-2 max-w-xs mx-auto leading-relaxed">
+              <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto leading-relaxed">
                 {onboardingScreens[onboardingIndex].subtitle}
               </p>
             </div>
 
             <button
               type="button"
-              onClick={handleNextOnboarding}
-              className="w-full py-4 rounded-2xl bg-[#FF5500] hover:bg-[#E64C00] text-white font-black text-sm tracking-wide shadow-emergency transition flex items-center justify-center gap-2"
+              onClick={handleNext}
+              className="w-full py-3.5 rounded-xl bg-[#FF4D00] hover:bg-[#E64400] text-white font-bold text-xs shadow-sm transition"
             >
-              <span>
-                {onboardingIndex === onboardingScreens.length - 1
-                  ? "Mulai Pakai Trobos"
-                  : "Lanjut"}
-              </span>
-              <ArrowRight className="w-4 h-4" />
+              {onboardingIndex === onboardingScreens.length - 1
+                ? "Mulai Pakai Trobos"
+                : "Lanjut"}
             </button>
           </div>
         )}

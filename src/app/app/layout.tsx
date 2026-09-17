@@ -12,11 +12,11 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col antialiased">
-      {/* Top Navigation */}
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased">
+      {/* Top Header */}
       <Navbar />
 
-      {/* Main App Workspace */}
+      {/* Main Container */}
       <div className="flex flex-1 relative max-w-7xl w-full mx-auto">
         {/* Desktop Sidebar */}
         <DesktopSidebar />
@@ -27,7 +27,7 @@ export default function AppLayout({
         </main>
       </div>
 
-      {/* Floating Demo Simulator Widget */}
+      {/* Discreet Simulation Controller */}
       <DemoController />
 
       {/* Mobile Bottom Navigation */}

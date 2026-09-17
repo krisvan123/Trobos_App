@@ -4,12 +4,10 @@ import React from "react";
 import { useTrobosStore } from "@/store/useTrobosStore";
 import {
   Car,
-  CheckCircle2,
-  Camera,
-  Fuel,
   ShieldCheck,
   Check,
-  AlertTriangle,
+  Fuel,
+  ArrowRight,
 } from "lucide-react";
 
 export const VehicleHandoverModal: React.FC = () => {
@@ -23,64 +21,53 @@ export const VehicleHandoverModal: React.FC = () => {
   const handover = currentTrip.handover;
   const vehicle = currentTrip.vehicle;
 
-  const checklistItems = [
-    { key: "front" as const, label: "Tampak Depan & Kap Mesin" },
-    { key: "rear" as const, label: "Tampak Belakang & Bagasi" },
-    { key: "left" as const, label: "Sisi Kiri & Pintu" },
-    { key: "right" as const, label: "Sisi Kanan & Pintu" },
-    { key: "interior" as const, label: "Interior Kabin & Odometer" },
+  const points = [
+    { key: "front" as const, label: "Tampak Depan" },
+    { key: "rear" as const, label: "Tampak Belakang" },
+    { key: "left" as const, label: "Sisi Kiri" },
+    { key: "right" as const, label: "Sisi Kanan" },
+    { key: "interior" as const, label: "Kabin & Odometer" },
   ];
 
-  const allChecked =
-    handover.front &&
-    handover.rear &&
-    handover.left &&
-    handover.right &&
-    handover.interior;
-
   return (
-    <div className="fixed inset-x-0 bottom-0 sm:bottom-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-40 w-full sm:max-w-lg px-4 pb-6 pt-2">
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200/90 p-5 max-h-[85vh] overflow-y-auto">
+    <div className="fixed inset-x-0 bottom-0 sm:bottom-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-40 w-full sm:max-w-md px-4 pb-6 pt-2">
+      <div className="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 text-slate-900 max-h-[85vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div>
-            <div className="text-[10px] font-bold text-orange-600 uppercase tracking-wider">
-              Prosedur Serah Terima (Handover)
-            </div>
-            <h3 className="text-lg font-black text-slate-900 tracking-tight">
-              Inspeksi Kendaraan Sebelum Trobos
-            </h3>
+        <div className="pb-3 border-b border-slate-100">
+          <div className="text-[11px] font-bold text-orange-600 uppercase">
+            Serah Terima Kendaraan
           </div>
-          <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-[#FF5500]">
-            <Car className="w-5 h-5" />
-          </div>
+          <h3 className="text-lg font-black text-slate-900">
+            Periksa Mobil Bersama Driver
+          </h3>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Driver Budi Santoso siap mengemudikan mobil Anda ke tujuan.
+          </p>
         </div>
 
-        {/* Vehicle Snapshot Card */}
-        <div className="mt-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+        {/* Vehicle & Driver Summary */}
+        <div className="my-3 p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between text-xs">
           <div>
-            <div className="text-sm font-bold text-slate-900">
-              {vehicle.brand} {vehicle.model} ({vehicle.year})
+            <div className="font-bold text-slate-900">
+              {vehicle.brand} {vehicle.model}
             </div>
-            <div className="text-xs text-slate-500">{vehicle.color}</div>
+            <div className="text-slate-500">{vehicle.color}</div>
           </div>
           <div className="text-right">
-            <span className="font-mono text-sm font-bold bg-white px-2.5 py-1 rounded-lg border border-slate-300 text-slate-900 shadow-sm block">
+            <span className="font-mono font-bold text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200">
               {vehicle.plate}
             </span>
           </div>
         </div>
 
-        {/* Fuel Gauge Tracker */}
-        <div className="mt-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
-              <Fuel className="w-4 h-4 text-amber-600" />
-              <span>Perekaman Level Bahan Bakar (BBM)</span>
-            </div>
-            <span className="text-xs font-bold text-slate-900">
-              {handover.fuelRecorded}% Terisi
+        {/* Fuel Gauge */}
+        <div className="mb-3.5 p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="font-semibold text-slate-700 flex items-center gap-1">
+              <Fuel className="w-3.5 h-3.5 text-amber-600" />
+              Bahan Bakar Tercatat
             </span>
+            <span className="font-bold text-slate-900">{handover.fuelRecorded}%</span>
           </div>
           <input
             type="range"
@@ -89,74 +76,58 @@ export const VehicleHandoverModal: React.FC = () => {
             step="5"
             value={handover.fuelRecorded}
             onChange={(e) => setHandoverFuel(Number(e.target.value))}
-            className="w-full accent-[#FF5500] cursor-pointer"
+            className="w-full accent-[#FF4D00] cursor-pointer"
           />
-          <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-            <span>E (Kosong)</span>
-            <span>50%</span>
-            <span>F (Penuh)</span>
-          </div>
         </div>
 
-        {/* 5-Point Photographic Checklist */}
-        <div className="mt-3.5">
-          <div className="text-xs font-bold text-slate-800 mb-2 flex items-center gap-1">
-            <Camera className="w-3.5 h-3.5 text-slate-500" />
-            <span>Checklist Foto Fisik 5 Sudut:</span>
+        {/* Simple 5-Point Check */}
+        <div className="mb-4">
+          <div className="text-xs font-bold text-slate-700 mb-2">
+            Kondisi Fisik Mobil (5 Titik):
           </div>
-          <div className="space-y-1.5">
-            {checklistItems.map((item) => {
-              const isChecked = handover[item.key];
+          <div className="grid grid-cols-2 gap-1.5 text-xs">
+            {points.map((p) => {
+              const isChecked = handover[p.key];
               return (
                 <button
-                  key={item.key}
+                  key={p.key}
                   type="button"
-                  onClick={() => toggleChecklistItem(item.key)}
-                  className={`w-full p-2.5 rounded-xl border text-xs flex items-center justify-between transition ${
+                  onClick={() => toggleChecklistItem(p.key)}
+                  className={`p-2 rounded-xl border text-left flex items-center gap-2 transition ${
                     isChecked
-                      ? "bg-emerald-50/70 border-emerald-300 text-emerald-950 font-semibold"
-                      : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                      ? "bg-emerald-50 border-emerald-300 text-emerald-900 font-semibold"
+                      : "bg-white border-slate-200 text-slate-600"
                   }`}
                 >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`w-5 h-5 rounded-lg flex items-center justify-center ${
-                        isChecked ? "bg-emerald-600 text-white" : "border border-slate-300 bg-white"
-                      }`}
-                    >
-                      {isChecked && <Check className="w-3.5 h-3.5" />}
-                    </div>
-                    <span>{item.label}</span>
+                  <div
+                    className={`w-4 h-4 rounded flex items-center justify-center ${
+                      isChecked ? "bg-emerald-600 text-white" : "border border-slate-300"
+                    }`}
+                  >
+                    {isChecked && <Check className="w-3 h-3" />}
                   </div>
-                  <span className="text-[10px] text-slate-400">
-                    {isChecked ? "Terdokumentasi" : "Ketuk untuk centang"}
-                  </span>
+                  <span>{p.label}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Insurance Guarantee Note */}
-        <div className="mt-3.5 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 flex items-center gap-2">
+        {/* Trust Note */}
+        <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-100 text-[11px] text-blue-900 flex items-center gap-2 mb-4">
           <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
-          <span className="text-[11px] leading-tight">
-            Polis perlindungan all-risk Trobos otomatis aktif begitu serah terima dikonfirmasi.
-          </span>
+          <span>Polis asuransi all-risk Rp 1 Miliar otomatis aktif selama perjalanan.</span>
         </div>
 
-        {/* Confirm Handover CTA */}
-        <div className="mt-4 pt-1">
-          <button
-            type="button"
-            disabled={!allChecked}
-            onClick={confirmVehicleHandover}
-            className="w-full py-4 rounded-2xl bg-[#FF5500] hover:bg-[#E64C00] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none text-white font-black text-sm tracking-wide shadow-emergency transition flex items-center justify-center gap-2"
-          >
-            <CheckCircle2 className="w-5 h-5" />
-            <span>KONFIRMASI SERAH TERIMA & JALAN</span>
-          </button>
-        </div>
+        {/* Primary CTA */}
+        <button
+          type="button"
+          onClick={confirmVehicleHandover}
+          className="w-full py-4 rounded-2xl bg-[#FF4D00] hover:bg-[#E64400] active:scale-[0.99] text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2"
+        >
+          <span>Konfirmasi Serah Terima</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );
