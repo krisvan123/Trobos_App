@@ -7,6 +7,7 @@ import { useTrobosStore } from "@/store/useTrobosStore";
 import { StatusBadge } from "@/components/common/StatusBadge";
 
 export const Navbar: React.FC = () => {
+  const user = useTrobosStore((s) => s.user);
   const currentTrip = useTrobosStore((s) => s.currentTrip);
   const notifications = useTrobosStore((s) => s.notifications);
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -23,8 +24,8 @@ export const Navbar: React.FC = () => {
             <span className="text-xl font-black tracking-tight text-slate-900">
               TROBOS
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-orange-100 text-orange-700">
-              DARURAT
+            <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-orange-100 text-[#FF4D00]">
+              RESCUE
             </span>
           </div>
         </Link>
@@ -69,6 +70,20 @@ export const Navbar: React.FC = () => {
             {unreadCount > 0 && (
               <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF4D00]" />
             )}
+          </Link>
+
+          {/* User Profile Shortcut */}
+          <Link
+            href="/app/profile"
+            className="p-1 rounded-full hover:ring-2 hover:ring-slate-200 transition"
+            title="Profil Akun"
+            aria-label="Profil Akun"
+          >
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="w-8 h-8 rounded-full object-cover border border-slate-200"
+            />
           </Link>
         </div>
       </div>

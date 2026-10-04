@@ -8,10 +8,14 @@ import {
   Clock,
   Car,
   Bike,
+  Truck,
   Star,
   Receipt,
   ChevronRight,
   X,
+  AlertTriangle,
+  Wrench,
+  Users,
 } from "lucide-react";
 
 export default function TripsPage() {
@@ -31,10 +35,10 @@ export default function TripsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-            Riwayat Perjalanan
+            Riwayat Penyelamatan
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Daftar perjalanan evakuasi macet dan penyerahan mobil Anda.
+            Daftar evakuasi mobil mogok dan pengantaran penumpang Anda.
           </p>
         </div>
 
@@ -58,13 +62,13 @@ export default function TripsPage() {
 
       {/* Trips List */}
       {filteredTrips.length === 0 ? (
-        <div className="p-10 text-center bg-white border border-slate-200 rounded-3xl">
-          <Clock className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+        <div className="p-10 text-center bg-white border border-slate-200 rounded-2xl shadow-subtle">
+          <Clock className="w-8 h-8 text-slate-400 mx-auto mb-2.5" />
           <h3 className="text-sm font-bold text-slate-800">
-            Belum Ada Riwayat Perjalanan
+            Belum ada riwayat penyelamatan
           </h3>
           <p className="text-xs text-slate-500 mt-0.5">
-            Saat Anda menggunakan Trobos, perjalanan Anda akan tercatat rapi di sini.
+            Laporan evakuasi mobil mogok Trobos Anda akan muncul di sini.
           </p>
         </div>
       ) : (
@@ -84,24 +88,35 @@ export default function TripsPage() {
                   <span className="text-slate-500">
                     {formatDateIndo(trip.date)}
                   </span>
+                  <span className="text-slate-400">•</span>
+                  <span className="font-semibold text-red-600 flex items-center gap-1 text-[11px]">
+                    <AlertTriangle className="w-3 h-3" />
+                    <span>{trip.problemLabel || "Mesin Mati"}</span>
+                  </span>
                 </div>
                 <div className="flex items-center gap-1 text-emerald-700 font-semibold text-[11px] bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                  <span>Selesai & Aman</span>
+                  <span>Evakuasi Berhasil</span>
                   <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700" />
                 </div>
               </div>
 
               {/* Route snippet */}
               <div className="py-2.5 flex items-center justify-between text-xs">
-                <div className="space-y-1 overflow-hidden pr-2">
+                <div className="space-y-1.5 overflow-hidden pr-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#FF4D00] shrink-0" />
-                    <span className="font-semibold text-slate-800 truncate">{trip.origin}</span>
+                    <span className="w-2 h-2 rounded-full bg-red-600 shrink-0" />
+                    <span className="font-semibold text-slate-800 truncate">Mogok: {trip.origin}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />
-                    <span className="font-semibold text-slate-800 truncate">{trip.destination}</span>
+                    <span className="font-semibold text-slate-800 truncate">Tujuan Penumpang: {trip.destination}</span>
                   </div>
+                  {trip.carDestination && (
+                    <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+                      <Wrench className="w-3 h-3 text-slate-400 shrink-0" />
+                      <span className="truncate">Bengkel Derek: {trip.carDestination.split("/")[0]}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="text-right shrink-0">
@@ -118,11 +133,15 @@ export default function TripsPage() {
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-1">
-                    <Bike className="w-3 h-3 text-sky-600" />
+                    {trip.passengerTransportType === "MOTOR" ? (
+                      <Bike className="w-3 h-3 text-sky-600" />
+                    ) : (
+                      <Car className="w-3 h-3 text-sky-600" />
+                    )}
                     <span>{trip.riderName}</span>
                   </span>
                   <span className="flex items-center gap-1">
-                    <Car className="w-3 h-3 text-amber-600" />
+                    <Truck className="w-3 h-3 text-orange-600" />
                     <span>{trip.driverName}</span>
                   </span>
                 </div>
@@ -150,7 +169,7 @@ export default function TripsPage() {
             <div className="flex items-center gap-2 mb-3">
               <Receipt className="w-4 h-4 text-orange-600" />
               <h3 className="text-base font-bold text-slate-900">
-                Rincian #{selectedTrip.id}
+                Rincian Evakuasi #{selectedTrip.id}
               </h3>
             </div>
 
@@ -160,20 +179,34 @@ export default function TripsPage() {
                 <span className="font-semibold text-slate-800">{formatDateIndo(selectedTrip.date)}</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-slate-500">Kendala Mobil</span>
+                <span className="font-bold text-red-600">{selectedTrip.problemLabel || "Mesin Mati"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Penumpang</span>
+                <span className="font-semibold text-slate-800">{selectedTrip.passengerCount || 1} Orang</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-slate-500">Jarak Tempuh</span>
                 <span className="font-semibold text-slate-800">{formatDistance(selectedTrip.distanceKm)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Kendaraan</span>
+                <span className="text-slate-500">Mobil Dievakuasi</span>
                 <span className="font-semibold text-slate-800">{selectedTrip.vehiclePlate}</span>
               </div>
+              {selectedTrip.carDestination && (
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Bengkel Rekanan</span>
+                  <span className="font-semibold text-slate-800 truncate max-w-[170px]">{selectedTrip.carDestination.split("/")[0]}</span>
+                </div>
+              )}
               <div className="flex justify-between">
-                <span className="text-slate-500">Rider</span>
+                <span className="text-slate-500">Armada Penumpang</span>
                 <span className="font-semibold text-slate-800">{selectedTrip.riderName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Driver</span>
-                <span className="font-semibold text-slate-800">{selectedTrip.driverName} (SIM A)</span>
+                <span className="text-slate-500">Unit Towing</span>
+                <span className="font-semibold text-slate-800">{selectedTrip.driverName}</span>
               </div>
               <div className="pt-2 border-t border-slate-200 flex justify-between font-bold text-sm">
                 <span>Total Biaya</span>

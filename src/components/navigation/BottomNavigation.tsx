@@ -12,10 +12,10 @@ export const BottomNavigation: React.FC = () => {
   const currentTrip = useTrobosStore((s) => s.currentTrip);
 
   const navItems = [
-    { href: "/app", label: "Beranda", icon: Home },
-    { href: "/app/trips", label: "Riwayat", icon: Clock },
-    { href: "/app/safety", label: "Keamanan", icon: ShieldCheck },
-    { href: "/app/profile", label: "Profil", icon: User },
+    { href: "/app", label: "Home", icon: Home },
+    { href: "/app/trips", label: "Trips", icon: Clock },
+    { href: "/app/safety", label: "Safety", icon: ShieldCheck },
+    { href: "/app/profile", label: "Profile", icon: User },
   ];
 
   const isTripActive =
@@ -45,9 +45,9 @@ export const BottomNavigation: React.FC = () => {
               )}
             >
               <div className="relative">
-                <Icon className={cn("w-5 h-5", isActive ? "stroke-[2.5]" : "stroke-[1.8]")} />
-                {item.label === "Beranda" && isTripActive && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#FF4D00] animate-ping" />
+                <Icon className={cn("w-5 h-5", isActive ? "stroke-[2.2]" : "stroke-[1.7]")} />
+                {item.label === "Home" && isTripActive && (
+                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#FF4D00]" />
                 )}
               </div>
               <span className="text-[11px] mt-1 tracking-tight">{item.label}</span>

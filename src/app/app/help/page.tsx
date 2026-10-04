@@ -25,7 +25,7 @@ export default function HelpCenterPage() {
           </h1>
         </div>
         <p className="text-xs sm:text-sm text-slate-500">
-          Pertanyaan umum seputar layanan evakuasi kemacetan Trobos.
+          Pertanyaan umum seputar layanan evakuasi mobil mogok & derek Trobos.
         </p>
       </div>
 

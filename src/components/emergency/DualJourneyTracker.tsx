@@ -5,13 +5,14 @@ import { useTrobosStore } from "@/store/useTrobosStore";
 import {
   Bike,
   Car,
+  Truck,
   Phone,
   MessageSquare,
   Share2,
   ShieldAlert,
   ShieldCheck,
+  Wrench,
 } from "lucide-react";
-import { formatTimeRemaining } from "@/lib/formatters";
 
 export const DualJourneyTracker: React.FC = () => {
   const currentTrip = useTrobosStore((s) => s.currentTrip);
@@ -22,7 +23,8 @@ export const DualJourneyTracker: React.FC = () => {
 
   if (!currentTrip) return null;
 
-  const tandem = currentTrip.tandem;
+  const transport = currentTrip.passengerTransport;
+  const towing = currentTrip.towingUnit;
   const userPercent = currentTrip.userProgressPercent || 45;
   const carPercent = currentTrip.carProgressPercent || 25;
 
@@ -43,34 +45,44 @@ export const DualJourneyTracker: React.FC = () => {
       <div className="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 text-slate-900">
         {/* Status Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <div>
-              <h3 className="text-base font-black text-slate-900">
-                Trobos Sedang Berjalan
-              </h3>
-              <p className="text-xs text-slate-500">
-                Menuju {currentTrip.destination.name.split("/")[0]}
-              </p>
-            </div>
+          <div>
+            <span className="text-[10px] uppercase font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+              Evakuasi Aktif
+            </span>
+            <h3 className="text-base font-black text-slate-900 mt-1">
+              Penyelamatan Trobos Berjalan
+            </h3>
+            <p className="text-xs text-slate-500">
+              Penumpang & mobil mogok dipantau secara simultan
+            </p>
+          </div>
+          <div className="text-right">
+            <span className="text-[10px] text-slate-400 font-bold uppercase block">Proteksi</span>
+            <span className="text-xs font-bold text-emerald-700 flex items-center justify-end gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Aktif
+            </span>
           </div>
         </div>
 
-        {/* DUAL JOURNEY COMPARISON CARDS - VISUALLY OBVIOUS */}
+        {/* DUAL JOURNEY COMPARISON CARDS (PASSENGERS vs BROKEN CAR) */}
         <div className="grid grid-cols-2 gap-3 my-3">
-          {/* Card 1: YOU (MOTOR) */}
-          <div className="p-3.5 rounded-2xl bg-sky-50 border border-sky-200">
+          {/* Card 1: PASSENGERS (DYNAMIC TRANSPORT) */}
+          <div className="p-3.5 rounded-2xl bg-sky-50/70 border border-sky-200">
             <div className="flex items-center gap-1.5 text-xs font-bold text-sky-800 uppercase">
-              <Bike className="w-4 h-4 text-sky-600" />
-              <span>Anda (Motor)</span>
+              {transport.type === "MOTOR" ? (
+                <Bike className="w-4 h-4 text-sky-600" />
+              ) : (
+                <Car className="w-4 h-4 text-sky-600" />
+              )}
+              <span>Anda & Rombongan</span>
             </div>
             <div className="text-2xl font-black text-sky-950 mt-1">
               {currentTrip.status === "USER_ARRIVED" || currentTrip.status === "VEHICLE_ARRIVED"
                 ? "Tiba"
-                : formatTimeRemaining(currentTrip.userEtaMinutes)}
+                : `${currentTrip.userEtaMinutes} min`}
             </div>
-            <div className="text-[11px] text-sky-700 mt-0.5">
-              Bersama Rider Rizky
+            <div className="text-[11px] text-sky-700 mt-0.5 font-medium truncate">
+              Menuju: {currentTrip.destination.name.split("/")[0]}
             </div>
 
             {/* Progress Bar */}
@@ -85,32 +97,32 @@ export const DualJourneyTracker: React.FC = () => {
               <button
                 type="button"
                 onClick={userArrivedAtDest}
-                className="mt-2.5 w-full py-1 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-[11px] font-bold"
+                className="mt-2.5 w-full py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-[11px] font-bold transition shadow-subtle"
               >
-                Tandai Anda Tiba
+                Tandai Penumpang Tiba
               </button>
             )}
           </div>
 
-          {/* Card 2: YOUR CAR (DRIVER) */}
-          <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-800 uppercase">
-              <Car className="w-4 h-4 text-amber-600" />
-              <span>Mobil Anda</span>
+          {/* Card 2: BROKEN CAR (TOWING TRUCK) */}
+          <div className="p-3.5 rounded-2xl bg-orange-50/70 border border-orange-200">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-orange-900 uppercase">
+              <Truck className="w-4 h-4 text-[#FF4D00]" />
+              <span>Mobil Mogok (Towing)</span>
             </div>
-            <div className="text-2xl font-black text-amber-950 mt-1">
+            <div className="text-2xl font-black text-orange-950 mt-1">
               {currentTrip.status === "VEHICLE_ARRIVED"
                 ? "Tiba"
-                : formatTimeRemaining(currentTrip.carEtaMinutes)}
+                : `${currentTrip.carEtaMinutes} min`}
             </div>
-            <div className="text-[11px] text-amber-700 mt-0.5">
-              Driver Budi Santoso
+            <div className="text-[11px] text-orange-800 mt-0.5 font-medium truncate">
+              Menuju: {currentTrip.carDestination.name.split("/")[0]}
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-amber-200 h-1.5 rounded-full mt-2.5 overflow-hidden">
+            <div className="w-full bg-orange-200 h-1.5 rounded-full mt-2.5 overflow-hidden">
               <div
-                className="bg-amber-600 h-full rounded-full transition-all duration-300"
+                className="bg-[#FF4D00] h-full rounded-full transition-all duration-300"
                 style={{ width: `${carPercent}%` }}
               />
             </div>
@@ -119,50 +131,72 @@ export const DualJourneyTracker: React.FC = () => {
               <button
                 type="button"
                 onClick={carArrivedAtDest}
-                className="mt-2.5 w-full py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold"
+                className="mt-2.5 w-full py-1.5 rounded-lg bg-[#FF4D00] hover:bg-[#E64400] text-white text-[11px] font-bold transition shadow-subtle"
               >
-                Tandai Mobil Tiba
+                Tandai Mobil Tiba di Bengkel
               </button>
             )}
           </div>
         </div>
 
-        {/* Calm reassurance message */}
-        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center gap-2 mb-3.5">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>Mobil Anda sedang dibawa menuju tujuan dengan aman.</span>
+        {/* RESCUE TIMELINE */}
+        <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 text-xs space-y-1.5">
+          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            Status Evakuasi & Penyelamatan
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-emerald-700 font-semibold text-xs">
+              <span className="w-4 text-center">✓</span>
+              <span>Laporan mogok diterima & unit diberangkatkan</span>
+            </div>
+            <div className="flex items-center gap-2 text-emerald-700 font-semibold text-xs">
+              <span className="w-4 text-center">✓</span>
+              <span>Truk derek & armada pengganti tiba di lokasi</span>
+            </div>
+            <div className="flex items-center gap-2 text-emerald-700 font-semibold text-xs">
+              <span className="w-4 text-center">✓</span>
+              <span>Inspeksi fisik & mobil dinaikkan ke flatbed</span>
+            </div>
+            <div className="flex items-center gap-2 text-slate-900 font-bold text-xs">
+              <span className="w-4 text-center text-[#FF4D00]">●</span>
+              <span>
+                {currentTrip.status === "USER_ARRIVED"
+                  ? "Penumpang tiba di tujuan • Derek menuju bengkel"
+                  : "Evakuasi berjalan serentak ke destinasi"}
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Clean Action Buttons */}
-        <div className="grid grid-cols-4 gap-2">
-          <button
-            type="button"
-            onClick={() => showToast(`Menghubungi: ${tandem?.driver.phone}`)}
-            className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium flex flex-col items-center gap-1"
+        {/* Clean Action Controls: Phone, Chat, Share, SOS */}
+        <div className="grid grid-cols-4 gap-2 pt-2">
+          <a
+            href={`tel:${towing.operatorPhone}`}
+            className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium flex flex-col items-center gap-1 transition"
           >
             <Phone className="w-4 h-4 text-emerald-600" />
-            <span className="text-[10px]">Telepon</span>
-          </button>
+            <span className="text-[10px] font-semibold">Towing</span>
+          </a>
           <button
             type="button"
-            onClick={() => showToast("Membuka ruang chat darurat...")}
-            className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium flex flex-col items-center gap-1"
+            onClick={() => showToast("Membuka ruang obrolan dengan tim rescue Trobos...")}
+            className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium flex flex-col items-center gap-1 transition"
           >
             <MessageSquare className="w-4 h-4 text-sky-600" />
-            <span className="text-[10px]">Chat</span>
+            <span className="text-[10px] font-semibold">Chat</span>
           </button>
           <button
             type="button"
-            onClick={() => showToast("Tautan live tracking disalin")}
-            className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium flex flex-col items-center gap-1"
+            onClick={() => showToast("Tautan live tracking derek disalin ke clipboard")}
+            className="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium flex flex-col items-center gap-1 transition"
           >
-            <Share2 className="w-4 h-4 text-indigo-600" />
-            <span className="text-[10px]">Bagikan</span>
+            <Share2 className="w-4 h-4 text-slate-600" />
+            <span className="text-[10px] font-semibold">Bagikan</span>
           </button>
           <button
             type="button"
-            onClick={() => showToast("Tim tanggap darurat Trobos siaga 24/7")}
-            className="p-2 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-medium flex flex-col items-center gap-1"
+            onClick={() => showToast("Pusat Tanggap Darurat Trobos Siaga 24 Jam")}
+            className="p-2 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-medium flex flex-col items-center gap-1 transition"
           >
             <ShieldAlert className="w-4 h-4 text-red-600" />
             <span className="text-[10px] font-bold">SOS</span>

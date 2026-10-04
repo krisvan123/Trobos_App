@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useTrobosStore } from "@/store/useTrobosStore";
 import { InteractiveMap } from "@/components/map/InteractiveMap";
 import { EmergencyButton } from "@/components/common/EmergencyButton";
@@ -12,7 +13,7 @@ import { VehicleHandoverModal } from "@/components/emergency/VehicleHandoverModa
 import { DualJourneyTracker } from "@/components/emergency/DualJourneyTracker";
 import { TripCompletedModal } from "@/components/emergency/TripCompletedModal";
 import { MOCK_LOCATIONS } from "@/lib/mockData";
-import { MapPin, ShieldCheck, Clock, Navigation } from "lucide-react";
+import { MapPin, ShieldCheck, Clock, HelpCircle, Navigation, Truck, Users, AlertTriangle } from "lucide-react";
 
 export default function HomePage() {
   const user = useTrobosStore((s) => s.user);
@@ -45,65 +46,94 @@ export default function HomePage() {
         />
       </div>
 
-      {/* 2. Top Bar: Greeting + Location (Clean, Elevated, Minimal) */}
-      <div className="relative z-20 p-4 sm:p-6 pointer-events-none">
-        <div className="max-w-md pointer-events-auto bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-3.5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-8 h-8 rounded-full object-cover border border-slate-200"
-              />
-              <div>
-                <div className="text-[11px] text-slate-500 font-medium">Selamat malam,</div>
-                <div className="text-sm font-bold text-slate-900 leading-none">
-                  {user.name}
-                </div>
-              </div>
+      {/* 2. Top Bar: Trobos Logo + User Breakdown Location + Profile Access */}
+      <div className="relative z-20 p-3 sm:p-4 pointer-events-none">
+        <div className="max-w-md mx-auto pointer-events-auto bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-3 shadow-card flex items-center justify-between gap-3">
+          {/* Trobos Brand Mark */}
+          <Link href="/app" className="flex items-center gap-2 shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-[#FF4D00] flex items-center justify-center shadow-subtle">
+              <span className="text-white font-black text-xs">T</span>
             </div>
+            <span className="text-sm font-black tracking-tight text-slate-900 hidden xs:inline">
+              TROBOS
+            </span>
+          </Link>
 
-            <div className="text-right">
-              <span className="text-[10px] uppercase font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Layanan Siaga
-              </span>
-            </div>
+          {/* User Breakdown Location */}
+          <div className="flex-1 min-w-0 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-700">
+            <MapPin className="w-3.5 h-3.5 text-red-600 shrink-0" />
+            <span className="truncate font-medium text-[11px] sm:text-xs">
+              {MOCK_LOCATIONS.current.name}
+            </span>
           </div>
 
-          <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5 text-xs text-slate-700">
-            <MapPin className="w-3.5 h-3.5 text-[#FF4D00] shrink-0" />
-            <span className="truncate font-medium">{MOCK_LOCATIONS.current.name}</span>
-          </div>
+          {/* Profile / Account Access */}
+          <Link
+            href="/app/profile"
+            className="flex items-center gap-1.5 shrink-0 pl-1 pr-1.5 py-1 rounded-full hover:bg-slate-100 transition"
+            title="Profil Akun"
+          >
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="w-7 h-7 rounded-full object-cover border border-slate-200"
+            />
+            <span className="text-xs font-bold text-slate-800 hidden sm:inline truncate max-w-[80px]">
+              {user.name.split(" ")[0]}
+            </span>
+          </Link>
         </div>
       </div>
 
-      {/* 3. Bottom Area: DOMINANT EMERGENCY CTA (When IDLE) */}
+      {/* 3. Bottom Area: DOMINANT EMERGENCY CTA + 3 Actions Only (When IDLE) */}
       {status === "IDLE" && (
-        <div className="mt-auto relative z-20 p-4 sm:p-6 pb-20 sm:pb-6 pointer-events-none">
-          <div className="max-w-md mx-auto pointer-events-auto bg-white border border-slate-200 rounded-3xl p-5 shadow-xl space-y-3">
-            {/* Supporting Explanation */}
+        <div className="mt-auto relative z-20 p-4 sm:p-6 pb-20 md:pb-6 pointer-events-none">
+          <div className="max-w-md mx-auto pointer-events-auto bg-white border border-slate-200 rounded-3xl p-5 shadow-elevated space-y-4">
+            {/* Dominant Primary CTA Header with REQUIRED EXACT COPY */}
             <div>
-              <div className="text-[11px] font-bold text-orange-600 uppercase tracking-wide">
-                Layanan Evakuasi Darurat
-              </div>
-              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
-                Terjebak macet? Kami bantu Anda dan mobil Anda sampai tujuan.
-              </h2>
+              <EmergencyButton onClick={handleOpenBooking} />
+              <p className="text-xs text-slate-600 text-center font-medium mt-2.5">
+                Mobil mogok? Tenang. Kami bantu evakuasi mobil dan mengantarkan Anda ke tujuan.
+              </p>
             </div>
 
-            {/* Dominant Primary CTA */}
-            <EmergencyButton onClick={handleOpenBooking} />
+            {/* Feature preview chips */}
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2 text-slate-700">
+                <Truck className="w-4 h-4 text-[#FF4D00] shrink-0" />
+                <span className="text-[11px] font-semibold">Truk Towing Gendong</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2 text-slate-700">
+                <Users className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="text-[11px] font-semibold">Armada Penumpang Dinamis</span>
+              </div>
+            </div>
 
-            {/* Supporting Micro-Info */}
-            <div className="pt-1 flex items-center justify-between text-xs text-slate-500">
-              <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
-                <span>Penjemputan ~3 menit</span>
-              </span>
-              <span className="flex items-center gap-1 text-emerald-700 font-medium">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Driver SIM A & Asuransi</span>
-              </span>
+            {/* Useful secondary actions: Riwayat, Keamanan, Bantuan */}
+            <div className="pt-2 border-t border-slate-100 grid grid-cols-3 gap-2">
+              <Link
+                href="/app/trips"
+                className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition text-center flex flex-col items-center gap-1 group"
+              >
+                <Clock className="w-4 h-4 text-slate-500 group-hover:text-slate-900 transition-colors" />
+                <span className="text-xs font-bold text-slate-800">Riwayat</span>
+              </Link>
+
+              <Link
+                href="/app/safety"
+                className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition text-center flex flex-col items-center gap-1 group"
+              >
+                <ShieldCheck className="w-4 h-4 text-emerald-600 group-hover:text-emerald-700 transition-colors" />
+                <span className="text-xs font-bold text-slate-800">Keamanan</span>
+              </Link>
+
+              <Link
+                href="/app/help"
+                className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition text-center flex flex-col items-center gap-1 group"
+              >
+                <HelpCircle className="w-4 h-4 text-sky-600 group-hover:text-sky-700 transition-colors" />
+                <span className="text-xs font-bold text-slate-800">Bantuan</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -133,9 +163,11 @@ export default function HomePage() {
                 <span className="w-2.5 h-2.5 rounded-full bg-[#FF4D00] animate-pulse" />
                 <div>
                   <h3 className="text-base font-black text-slate-900">
-                    Tandem Menuju Lokasi Anda
+                    Unit Rescue Menuju Lokasi Anda
                   </h3>
-                  <p className="text-xs text-slate-500">Rizky (Motor) & Budi (Driver)</p>
+                  <p className="text-xs text-slate-500">
+                    Towing Flatbed & Armada Penjemput
+                  </p>
                 </div>
               </div>
               <div className="text-right">
@@ -151,11 +183,11 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-2 text-emerald-700 font-medium">
                 <span>✓</span>
-                <span>Tandem diberangkatkan bersamaan</span>
+                <span>Truk derek & armada pengganti meluncur bersamaan</span>
               </div>
               <div className="flex items-center gap-2 text-[#FF4D00] font-bold">
                 <Navigation className="w-3.5 h-3.5 animate-spin" />
-                <span>Mendekati titik jemput Anda (Sudirman Kav. 28)</span>
+                <span>Mendekati titik mogok Anda (Sudirman Kav. 28)</span>
               </div>
             </div>
 
@@ -164,7 +196,7 @@ export default function HomePage() {
               onClick={setArrived}
               className="w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition"
             >
-              Tandai: Tandem Telah Sampai di Depan Anda
+              Tandai: Unit Rescue Telah Sampai di Depan Anda
             </button>
           </div>
         </div>

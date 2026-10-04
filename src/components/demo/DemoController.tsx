@@ -25,17 +25,17 @@ export const DemoController: React.FC = () => {
   const currentStatus = currentTrip?.status || "IDLE";
 
   const statesList: { status: TripStatus; label: string }[] = [
-    { status: "IDLE", label: "0. Normal (Siaga)" },
-    { status: "REQUESTED", label: "1. Konfirmasi Permintaan" },
-    { status: "SEARCHING_TANDEM", label: "2. Radar Mencari Tandem" },
-    { status: "TANDEM_ASSIGNED", label: "3. Tandem Ditemukan" },
-    { status: "TANDEM_APPROACHING", label: "4. Tandem Menuju Titik" },
-    { status: "TANDEM_ARRIVED", label: "5. Tandem Tiba (OTP PIN)" },
-    { status: "VEHICLE_HANDOVER", label: "6. Serah Terima Mobil" },
-    { status: "TRIP_STARTED", label: "7. Perjalanan (Dual ETA)" },
-    { status: "USER_ARRIVED", label: "8. Anda Tiba di Tujuan" },
-    { status: "VEHICLE_ARRIVED", label: "9. Mobil Tiba di Tujuan" },
-    { status: "COMPLETED", label: "10. Selesai & Rating" },
+    { status: "IDLE", label: "0. Siaga Mobil Mogok" },
+    { status: "REQUESTED", label: "1. Formulir Permintaan Bantuan" },
+    { status: "SEARCHING_TANDEM", label: "2. Radar Mencari Unit Towing" },
+    { status: "TANDEM_ASSIGNED", label: "3. Towing & Armada Ditemukan" },
+    { status: "TANDEM_APPROACHING", label: "4. Unit Rescue Menuju Lokasi" },
+    { status: "TANDEM_ARRIVED", label: "5. Unit Tiba & Verifikasi PIN" },
+    { status: "VEHICLE_HANDOVER", label: "6. Inspeksi Mobil & Naik Derek" },
+    { status: "TRIP_STARTED", label: "7. Evakuasi Berjalan (Dual Track)" },
+    { status: "USER_ARRIVED", label: "8. Penumpang Tiba di Tujuan" },
+    { status: "VEHICLE_ARRIVED", label: "9. Mobil Tiba di Bengkel" },
+    { status: "COMPLETED", label: "10. Penyelamatan Sukses Selesai" },
   ];
 
   return (
@@ -63,10 +63,10 @@ export const DemoController: React.FC = () => {
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
               <div className="text-[10px] uppercase font-bold text-slate-400">
-                Simulasi Presentasi
+                Simulasi Breakdown Rescue
               </div>
               <div className="text-xs font-bold text-slate-800">
-                Status: <span className="text-[#FF4D00]">{currentStatus}</span>
+                Tahap: <span className="text-[#FF4D00]">{currentStatus}</span>
               </div>
             </div>
             <button
@@ -95,7 +95,7 @@ export const DemoController: React.FC = () => {
                 className="w-full py-2 rounded-xl bg-[#FF4D00] hover:bg-[#E64400] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition"
               >
                 <Play className="w-3 h-3 fill-white" />
-                <span>Simulate Trobos (Auto)</span>
+                <span>Simulasi Otomatis (Demo)</span>
               </button>
             )}
           </div>

@@ -1,10 +1,10 @@
 export type TripStatus =
   | 'IDLE'
   | 'REQUESTED'
-  | 'SEARCHING_TANDEM'
-  | 'TANDEM_ASSIGNED'
-  | 'TANDEM_APPROACHING'
-  | 'TANDEM_ARRIVED'
+  | 'SEARCHING_TANDEM' // alias SEARCHING_RESCUE
+  | 'TANDEM_ASSIGNED'  // alias RESCUE_ASSIGNED
+  | 'TANDEM_APPROACHING' // alias RESCUE_APPROACHING
+  | 'TANDEM_ARRIVED'  // alias RESCUE_ARRIVED
   | 'VERIFICATION'
   | 'VEHICLE_HANDOVER'
   | 'TRIP_STARTED'
@@ -48,6 +48,47 @@ export interface Vehicle {
   transmission: 'Automatic' | 'Manual';
 }
 
+export type BreakdownProblemId =
+  | 'engine_failure'
+  | 'flat_tire'
+  | 'battery_dead'
+  | 'overheat'
+  | 'starter_failure'
+  | 'minor_accident'
+  | 'unknown';
+
+export interface BreakdownProblem {
+  id: BreakdownProblemId;
+  label: string;
+  description: string;
+  iconName: string;
+  severity: 'high' | 'medium' | 'low';
+}
+
+export type PassengerTransportType = 'MOTOR' | 'CAR' | 'VAN';
+
+export interface PassengerTransportOption {
+  type: PassengerTransportType;
+  title: string;
+  capacityLabel: string;
+  description: string;
+  recommendedFor: string;
+  vehicleModel: string;
+  driverName: string;
+  driverPhone: string;
+  driverRating: number;
+  plate: string;
+}
+
+export interface TowingUnit {
+  operatorName: string;
+  operatorPhone: string;
+  operatorRating: number;
+  truckModel: string;
+  plate: string;
+  type: 'Truk Towing Gendong Flatbed' | 'Derek Hidrolik';
+}
+
 export interface Rider {
   id: string;
   name: string;
@@ -74,17 +115,19 @@ export interface Driver {
 export interface TandemUnit {
   rider: Rider;
   driver: Driver;
+  towing?: TowingUnit;
 }
 
 export interface FareBreakdown {
   baseFare: number;
-  emergencyService: number;
+  emergencyService: number; // layanan rescue breakdown
   distanceFare: number;
+  towingFare: number;
   surgeFare: number;
   totalFare: number;
   distanceKm: number;
-  estimatedMotorMinutes: number;
-  estimatedCarMinutes: number;
+  estimatedPassengerMinutes: number;
+  estimatedTowingMinutes: number;
 }
 
 export interface HandoverChecklist {
@@ -94,6 +137,7 @@ export interface HandoverChecklist {
   right: boolean;
   interior: boolean;
   fuelRecorded: number;
+  problemConfirmed: boolean;
   confirmed: boolean;
 }
 
@@ -101,9 +145,15 @@ export interface ActiveTrip {
   id: string;
   status: TripStatus;
   origin: LocationPoint;
-  destination: LocationPoint;
+  destination: LocationPoint; // passenger destination
+  carDestination: LocationPoint; // workshop or same destination
+  carDestinationType: 'WORKSHOP' | 'SAME_AS_PASSENGER';
+  problem: BreakdownProblem;
+  passengerCount: number;
+  passengerTransport: PassengerTransportOption;
   vehicle: Vehicle;
   tandem: TandemUnit | null;
+  towingUnit: TowingUnit;
   fare: FareBreakdown;
   otpCode: string;
   handover: HandoverChecklist;
@@ -121,6 +171,10 @@ export interface TripHistoryItem {
   date: string;
   origin: string;
   destination: string;
+  carDestination: string;
+  problemLabel: string;
+  passengerCount: number;
+  passengerTransportType: PassengerTransportType;
   fare: number;
   distanceKm: number;
   status: 'Completed' | 'Cancelled';

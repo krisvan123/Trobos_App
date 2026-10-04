@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Zap, Mail, Lock, ArrowRight } from "lucide-react";
+import { useTrobosStore } from "@/store/useTrobosStore";
 
 export default function LoginPage() {
   const router = useRouter();
+  const login = useTrobosStore((s) => s.login);
   const [identifier, setIdentifier] = useState("andi.pratama@gmail.com");
   const [password, setPassword] = useState("••••••••");
   const [isLoading, setIsLoading] = useState(false);
@@ -14,10 +16,11 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    login(identifier);
     setTimeout(() => {
       setIsLoading(false);
       router.push("/app");
-    }, 500);
+    }, 400);
   };
 
   return (

@@ -4,13 +4,15 @@
 
 :root {
   --background: #F8FAFC;
-  --foreground: #0F172A;
+  --foreground: #0B0F19;
   --card: #FFFFFF;
-  --card-foreground: #0F172A;
-  --primary: #FF4D00;
+  --card-foreground: #0B0F19;
+  --primary: #0B0F19;
   --primary-foreground: #FFFFFF;
-  --secondary: #0F172A;
+  --secondary: #64748B;
   --secondary-foreground: #FFFFFF;
+  --accent: #FF4D00;
+  --accent-foreground: #FFFFFF;
   --muted: #F1F5F9;
   --muted-foreground: #64748B;
   --border: #E2E8F0;
@@ -41,29 +43,20 @@ body {
   background: #94A3B8;
 }
 
-/* Clean Consumer Card Elevation */
+/* Professional Flat / Subtle Elevated Layout Helpers */
+.trobos-surface {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+}
+
 .trobos-card {
   background-color: #FFFFFF;
   border: 1px solid #E2E8F0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
 }
 
 .trobos-card-elevated {
   background-color: #FFFFFF;
   border: 1px solid #E2E8F0;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-}
-
-/* Subtle, Calm Pulse for Emergency Button */
-@keyframes calm-pulse {
-  0%, 100% {
-    box-shadow: 0 4px 14px 0 rgba(255, 77, 0, 0.35);
-  }
-  50% {
-    box-shadow: 0 6px 22px 0 rgba(255, 77, 0, 0.55);
-  }
-}
-
-.emergency-cta-pulse {
-  animation: calm-pulse 2.4s ease-in-out infinite;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
 }

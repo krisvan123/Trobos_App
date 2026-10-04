@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -12,80 +12,106 @@ import {
   Bell,
   User,
   Zap,
+  LogOut,
+  Settings,
 } from "lucide-react";
 import { useTrobosStore } from "@/store/useTrobosStore";
 import { cn } from "@/lib/utils";
+import { LogoutConfirmModal } from "@/components/common/LogoutConfirmModal";
 
 export const DesktopSidebar: React.FC = () => {
   const pathname = usePathname();
   const startBooking = useTrobosStore((s) => s.startBooking);
   const user = useTrobosStore((s) => s.user);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const mainLinks = [
-    { href: "/app", label: "Beranda", icon: Home },
-    { href: "/app/trips", label: "Riwayat Perjalanan", icon: Clock },
-    { href: "/app/vehicles", label: "Kendaraan Saya", icon: Car },
-    { href: "/app/safety", label: "Pusat Keamanan", icon: ShieldCheck },
-    { href: "/app/notifications", label: "Notifikasi", icon: Bell },
-    { href: "/app/help", label: "Pusat Bantuan", icon: HelpCircle },
-    { href: "/app/profile", label: "Profil Akun", icon: User },
+    { href: "/app", label: "Home", icon: Home },
+    { href: "/app/trips", label: "Trips", icon: Clock },
+    { href: "/app/safety", label: "Safety", icon: ShieldCheck },
+    { href: "/app/vehicles", label: "Vehicles", icon: Car },
+    { href: "/app/notifications", label: "Notifications", icon: Bell },
+    { href: "/app/profile", label: "Profile", icon: User },
+    { href: "/app/help", label: "Help Center", icon: HelpCircle },
   ];
 
   return (
-    <aside className="hidden md:flex flex-col w-60 bg-white border-r border-slate-200 h-[calc(100vh-4rem)] sticky top-16 shrink-0 justify-between p-4 overflow-y-auto">
-      <div className="space-y-4">
-        {/* User Snapshot */}
-        <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200/60">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="w-9 h-9 rounded-full object-cover border border-slate-200"
-          />
-          <div className="overflow-hidden">
-            <h4 className="text-xs font-bold text-slate-900 truncate">
-              {user.name}
-            </h4>
-            <p className="text-[11px] text-slate-500 truncate">{user.phone}</p>
-          </div>
+    <>
+      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 h-[calc(100vh-4rem)] sticky top-16 shrink-0 justify-between p-4 overflow-y-auto">
+        <div className="space-y-4">
+          {/* User Snapshot */}
+          <Link
+            href="/app/profile"
+            className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition group"
+          >
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="w-9 h-9 rounded-full object-cover border border-slate-200"
+            />
+            <div className="overflow-hidden">
+              <h4 className="text-xs font-bold text-slate-900 truncate group-hover:text-[#FF4D00] transition-colors">
+                {user.name}
+              </h4>
+              <p className="text-[11px] text-slate-500 truncate">{user.phone}</p>
+            </div>
+          </Link>
+
+          {/* Quick CTA */}
+          <button
+            onClick={() => startBooking()}
+            className="w-full bg-[#FF4D00] hover:bg-[#E64500] text-white p-3 rounded-xl shadow-sm font-bold text-xs flex items-center justify-center gap-2 transition active:scale-[0.99]"
+          >
+            <Zap className="w-4 h-4 fill-white" />
+            <span>MINTA BANTUAN</span>
+          </button>
+
+          {/* Navigation Links */}
+          <nav className="space-y-1">
+            {mainLinks.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors",
+                    isActive
+                      ? "bg-slate-900 text-white"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  )}
+                >
+                  <Icon className={cn("w-4 h-4", isActive ? "text-[#FF4D00]" : "text-slate-400")} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Quick CTA */}
-        <button
-          onClick={() => startBooking()}
-          className="w-full bg-[#FF4D00] hover:bg-[#E64400] text-white p-3 rounded-xl shadow-sm font-bold text-xs flex items-center justify-center gap-2 transition"
-        >
-          <Zap className="w-4 h-4 fill-white" />
-          <span>Trobos Sekarang</span>
-        </button>
+        {/* Bottom Actions: Logout */}
+        <div className="pt-3 border-t border-slate-100 space-y-2">
+          <button
+            type="button"
+            onClick={() => setIsLogoutModalOpen(true)}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 transition"
+          >
+            <LogOut className="w-4 h-4 text-red-500" />
+            <span>Keluar</span>
+          </button>
 
-        {/* Links */}
-        <nav className="space-y-0.5">
-          {mainLinks.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+          <div className="text-[10px] text-slate-400 text-center">
+            Trobos Mobility • v1.2 Prototype
+          </div>
+        </div>
+      </aside>
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors",
-                  isActive
-                    ? "bg-slate-900 text-white"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                )}
-              >
-                <Icon className={cn("w-4 h-4", isActive ? "text-orange-400" : "text-slate-400")} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-
-      <div className="pt-3 border-t border-slate-100 text-[11px] text-slate-400 text-center">
-        Trobos Mobility • v1.2
-      </div>
-    </aside>
+      <LogoutConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+      />
+    </>
   );
 };

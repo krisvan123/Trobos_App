@@ -10,6 +10,7 @@ import {
   Fuel,
   Check,
   X,
+  Truck,
 } from "lucide-react";
 
 export default function VehiclesPage() {
@@ -57,7 +58,7 @@ export default function VehiclesPage() {
             Kendaraan Terdaftar
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Mobil yang siap diambil alih oleh Driver Trobos saat Anda terjebak macet.
+            Mobil yang siap dievakuasi oleh Unit Towing Trobos saat mengalami mogok di jalan.
           </p>
         </div>
         <button
@@ -122,7 +123,7 @@ export default function VehiclesPage() {
                 </div>
                 <div className="pt-1.5 border-t border-slate-200 flex justify-between text-[11px] text-emerald-700 font-semibold">
                   <span className="flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3" /> STNK Terverifikasi
+                    <ShieldCheck className="w-3 h-3" /> STNK & Proteksi Aktif
                   </span>
                 </div>
               </div>

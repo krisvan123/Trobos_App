@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Zap, User, Phone, Mail, Lock, ArrowRight } from "lucide-react";
+import { Zap, User, Phone, Mail, Lock, ArrowRight, Bike, Car } from "lucide-react";
+import { useTrobosStore } from "@/store/useTrobosStore";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const login = useTrobosStore((s) => s.login);
   const [formData, setFormData] = useState({
     name: "Andi Pratama",
     phone: "081234567890",
@@ -22,22 +24,23 @@ export default function RegisterPage() {
     {
       title: "Escape the Traffic",
       subtitle: "Trobos kemacetan dengan rider motor terlatih yang membawa Anda ke tujuan.",
-      icon: "🏍️",
+      icon: Bike,
     },
     {
       title: "Your Car Is Still Safe",
       subtitle: "Driver profesional mengambil alih mobil Anda dan mengemudikannya dengan aman.",
-      icon: "🚗",
+      icon: Car,
     },
     {
       title: "One Tap. Two Drivers. One Destination.",
       subtitle: "Anda dan mobil Anda akhirnya bertemu kembali di tempat tujuan.",
-      icon: "⚡",
+      icon: Zap,
     },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    login(formData.email);
     setStep("onboarding");
   };
 
@@ -182,8 +185,10 @@ export default function RegisterPage() {
               ))}
             </div>
 
-            <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl bg-slate-50 border border-slate-200">
-              {onboardingScreens[onboardingIndex].icon}
+            <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center bg-orange-50 border border-orange-200">
+              {React.createElement(onboardingScreens[onboardingIndex].icon, {
+                className: "w-7 h-7 text-[#FF4D00]",
+              })}
             </div>
 
             <div>

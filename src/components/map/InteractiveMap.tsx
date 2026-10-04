@@ -271,9 +271,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
           {isApproaching && (
             <g transform={`translate(${tandemApproachingPos.x}, ${tandemApproachingPos.y})`}>
               <rect x="-14" y="-14" width="28" height="28" rx="8" fill="#0F172A" stroke="#FF4D00" strokeWidth="2" />
-              <text x="0" y="4" fill="#FFFFFF" fontSize="12" fontWeight="900" textAnchor="middle">
-                ⚡
-              </text>
+              <path d="M1 -6 L-5 1 L0 1 L-1 7 L5 -1 L0 -1 Z" fill="#FF4D00" />
               <g transform="translate(0, -22)">
                 <rect x="-45" y="-12" width="90" height="18" rx="6" fill="#FF4D00" />
                 <text x="0" y="1" fill="#FFFFFF" fontSize="9" fontWeight="700" textAnchor="middle">
@@ -288,10 +286,13 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
             <g>
               {/* YOU ON MOTORBIKE */}
               <g transform={`translate(${motorPos.x}, ${motorPos.y})`}>
-                <rect x="-14" y="-14" width="28" height="28" rx="8" fill="#0284C7" stroke="#FFFFFF" strokeWidth="2" shadow-sm="true" />
-                <text x="0" y="4" fill="#FFFFFF" fontSize="12" textAnchor="middle">
-                  🏍️
-                </text>
+                <rect x="-14" y="-14" width="28" height="28" rx="8" fill="#0284C7" stroke="#FFFFFF" strokeWidth="2" />
+                {/* Clean Vector Motorbike */}
+                <g transform="translate(0, -1)">
+                  <circle cx="-5" cy="4" r="3" fill="none" stroke="#FFFFFF" strokeWidth="1.4" />
+                  <circle cx="5" cy="4" r="3" fill="none" stroke="#FFFFFF" strokeWidth="1.4" />
+                  <path d="M-5 4 L-1 0 L3 0 L5 -3 M-1 0 L2 4" fill="none" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                </g>
                 <g transform="translate(0, -22)">
                   <rect x="-40" y="-12" width="80" height="18" rx="6" fill="#0284C7" />
                   <text x="0" y="1" fill="#FFFFFF" fontSize="9" fontWeight="700" textAnchor="middle">
@@ -303,9 +304,12 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
               {/* YOUR CAR FOLLOWING */}
               <g transform={`translate(${carPos.x}, ${carPos.y})`}>
                 <rect x="-14" y="-14" width="28" height="28" rx="8" fill="#D97706" stroke="#FFFFFF" strokeWidth="2" />
-                <text x="0" y="4" fill="#FFFFFF" fontSize="12" textAnchor="middle">
-                  🚗
-                </text>
+                {/* Clean Vector Car */}
+                <g transform="translate(0, -1)">
+                  <path d="M-7 3 L-5 -2 L-1 -5 L3 -5 L6 -2 L8 3 Z" fill="none" stroke="#FFFFFF" strokeWidth="1.3" strokeLinejoin="round" />
+                  <circle cx="-4" cy="4" r="1.8" fill="#FFFFFF" />
+                  <circle cx="4" cy="4" r="1.8" fill="#FFFFFF" />
+                </g>
                 <g transform="translate(0, 26)">
                   <rect x="-46" y="-12" width="92" height="18" rx="6" fill="#B45309" />
                   <text x="0" y="1" fill="#FFFFFF" fontSize="9" fontWeight="700" textAnchor="middle">

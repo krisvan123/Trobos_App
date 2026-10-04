@@ -10,15 +10,21 @@ import {
   TripHistoryItem,
   AppNotification,
   HandoverChecklist,
+  BreakdownProblemId,
+  BreakdownProblem,
+  PassengerTransportOption,
 } from "@/types/trobos";
 import {
   MOCK_USER,
   MOCK_VEHICLES,
   MOCK_LOCATIONS,
   MOCK_TANDEM,
+  MOCK_TOWING,
   DEFAULT_FARE,
   MOCK_TRIP_HISTORY,
   MOCK_NOTIFICATIONS,
+  BREAKDOWN_PROBLEMS,
+  getPassengerTransportOption,
 } from "@/lib/mockData";
 
 interface TrobosStore {
@@ -26,6 +32,10 @@ interface TrobosStore {
   vehicles: Vehicle[];
   activeVehicleId: string;
   selectedDestination: LocationPoint;
+  selectedWorkshop: LocationPoint;
+  carDestinationType: 'WORKSHOP' | 'SAME_AS_PASSENGER';
+  selectedProblemId: BreakdownProblemId;
+  passengerCount: number;
   currentTrip: ActiveTrip | null;
   tripHistory: TripHistoryItem[];
   notifications: AppNotification[];
@@ -33,9 +43,16 @@ interface TrobosStore {
   demoTimerId: NodeJS.Timeout | null;
   isDriverOnline: boolean;
   hasDriverIncomingOrder: boolean;
+  isAuthenticated: boolean;
 
   // Actions
+  login: (email?: string) => void;
+  logout: () => void;
   setSelectedDestination: (dest: LocationPoint) => void;
+  setSelectedWorkshop: (shop: LocationPoint) => void;
+  setCarDestinationType: (type: 'WORKSHOP' | 'SAME_AS_PASSENGER') => void;
+  setSelectedProblemId: (id: BreakdownProblemId) => void;
+  setPassengerCount: (count: number) => void;
   setActiveVehicleId: (id: string) => void;
   addVehicle: (v: Vehicle) => void;
   startBooking: (destination?: LocationPoint) => void;
@@ -67,6 +84,7 @@ const INITIAL_HANDOVER: HandoverChecklist = {
   right: true,
   interior: true,
   fuelRecorded: 65,
+  problemConfirmed: true,
   confirmed: false,
 };
 
@@ -77,6 +95,10 @@ export const useTrobosStore = create<TrobosStore>()(
       vehicles: MOCK_VEHICLES,
       activeVehicleId: MOCK_VEHICLES[0].id,
       selectedDestination: MOCK_LOCATIONS.destinations[0],
+      selectedWorkshop: MOCK_LOCATIONS.workshops[0],
+      carDestinationType: 'WORKSHOP',
+      selectedProblemId: 'engine_failure',
+      passengerCount: 1,
       currentTrip: null,
       tripHistory: MOCK_TRIP_HISTORY,
       notifications: MOCK_NOTIFICATIONS,
@@ -84,8 +106,36 @@ export const useTrobosStore = create<TrobosStore>()(
       demoTimerId: null,
       isDriverOnline: true,
       hasDriverIncomingOrder: false,
+      isAuthenticated: true,
+
+      login: (email) => {
+        set((state) => ({
+          isAuthenticated: true,
+          user: email ? { ...state.user, email } : state.user,
+        }));
+      },
+
+      logout: () => {
+        if (typeof window !== "undefined") {
+          try {
+            localStorage.removeItem("trobos_app_storage");
+          } catch {}
+        }
+        set({
+          isAuthenticated: false,
+          currentTrip: null,
+          isDemoRunning: false,
+        });
+      },
 
       setSelectedDestination: (dest) => set({ selectedDestination: dest }),
+      setSelectedWorkshop: (shop) => set({ selectedWorkshop: shop }),
+      setCarDestinationType: (type) => set({ carDestinationType: type }),
+      setSelectedProblemId: (id) => set({ selectedProblemId: id }),
+      setPassengerCount: (count) => {
+        const validated = Math.max(1, Math.min(8, count));
+        set({ passengerCount: validated });
+      },
       setActiveVehicleId: (id) => set({ activeVehicleId: id }),
 
       addVehicle: (v) =>
@@ -99,21 +149,54 @@ export const useTrobosStore = create<TrobosStore>()(
         const activeVeh =
           state.vehicles.find((v) => v.id === state.activeVehicleId) || state.vehicles[0];
         const dest = destination || state.selectedDestination;
+        const workshop = state.selectedWorkshop;
+        const carDest = state.carDestinationType === 'WORKSHOP' ? workshop : dest;
+
+        const problem =
+          BREAKDOWN_PROBLEMS.find((p) => p.id === state.selectedProblemId) ||
+          BREAKDOWN_PROBLEMS[0];
+
+        const passengerTransport = getPassengerTransportOption(state.passengerCount);
+
+        // Calculate dynamic fare depending on passenger transport
+        let extraTransportFare = 0;
+        let passengerEta = 18;
+        if (passengerTransport.type === "CAR") {
+          extraTransportFare = 35000;
+          passengerEta = 24;
+        } else if (passengerTransport.type === "VAN") {
+          extraTransportFare = 75000;
+          passengerEta = 28;
+        }
+
+        const calculatedFare = {
+          ...DEFAULT_FARE,
+          distanceFare: DEFAULT_FARE.distanceFare + extraTransportFare,
+          totalFare: DEFAULT_FARE.baseFare + DEFAULT_FARE.emergencyService + DEFAULT_FARE.towingFare + DEFAULT_FARE.distanceFare + extraTransportFare,
+          estimatedPassengerMinutes: passengerEta,
+          estimatedTowingMinutes: 32,
+        };
 
         const newTrip: ActiveTrip = {
           id: `TRB-${Math.floor(10000 + Math.random() * 90000)}`,
           status: "REQUESTED",
           origin: MOCK_LOCATIONS.current,
           destination: dest,
+          carDestination: carDest,
+          carDestinationType: state.carDestinationType,
+          problem,
+          passengerCount: state.passengerCount,
+          passengerTransport,
           vehicle: activeVeh,
           tandem: null,
-          fare: DEFAULT_FARE,
+          towingUnit: MOCK_TOWING,
+          fare: calculatedFare,
           otpCode: "4821",
           handover: INITIAL_HANDOVER,
           userProgressPercent: 0,
           carProgressPercent: 0,
-          userEtaMinutes: 18,
-          carEtaMinutes: 31,
+          userEtaMinutes: passengerEta,
+          carEtaMinutes: 32,
           createdAt: new Date().toISOString(),
         };
 
@@ -284,12 +367,16 @@ export const useTrobosStore = create<TrobosStore>()(
           date: new Date().toISOString(),
           origin: state.currentTrip.origin.name,
           destination: state.currentTrip.destination.name,
+          carDestination: state.currentTrip.carDestination.name,
+          problemLabel: state.currentTrip.problem.label,
+          passengerCount: state.currentTrip.passengerCount,
+          passengerTransportType: state.currentTrip.passengerTransport.type,
           fare: state.currentTrip.fare.totalFare,
           distanceKm: state.currentTrip.fare.distanceKm,
           status: "Completed",
           vehiclePlate: state.currentTrip.vehicle.plate,
-          riderName: state.currentTrip.tandem?.rider.name || "Rizky Pratama",
-          driverName: state.currentTrip.tandem?.driver.name || "Budi Santoso",
+          riderName: state.currentTrip.passengerTransport.driverName || "Rizky Pratama",
+          driverName: state.currentTrip.towingUnit.operatorName || "Pak Slamet (Towing)",
           rating: rating || 5,
         };
 
@@ -321,13 +408,24 @@ export const useTrobosStore = create<TrobosStore>()(
           return;
         }
 
+        const problem =
+          BREAKDOWN_PROBLEMS.find((p) => p.id === state.selectedProblemId) ||
+          BREAKDOWN_PROBLEMS[0];
+        const passengerTransport = getPassengerTransportOption(state.passengerCount);
+
         const baseTrip: ActiveTrip = state.currentTrip || {
           id: `TRB-DEMO-${Math.floor(1000 + Math.random() * 9000)}`,
           status: targetStatus,
           origin: MOCK_LOCATIONS.current,
           destination: state.selectedDestination,
+          carDestination: state.selectedWorkshop,
+          carDestinationType: state.carDestinationType,
+          problem,
+          passengerCount: state.passengerCount,
+          passengerTransport,
           vehicle: activeVeh,
           tandem: MOCK_TANDEM,
+          towingUnit: MOCK_TOWING,
           fare: DEFAULT_FARE,
           otpCode: "4821",
           handover: INITIAL_HANDOVER,
@@ -365,6 +463,7 @@ export const useTrobosStore = create<TrobosStore>()(
             ...baseTrip,
             status: targetStatus,
             tandem: MOCK_TANDEM,
+            towingUnit: MOCK_TOWING,
             userProgressPercent: userProg,
             carProgressPercent: carProg,
             userEtaMinutes: userEta,
@@ -415,7 +514,7 @@ export const useTrobosStore = create<TrobosStore>()(
         }, 26000);
 
         setTimeout(() => {
-          get().completeTrip(5, ["Rider Gesit", "Mobil Aman"]);
+          get().completeTrip(5, ["Towing Sigap", "Penumpang Cepat Tiba"]);
           set({ isDemoRunning: false });
         }, 29000);
       },
@@ -444,6 +543,10 @@ export const useTrobosStore = create<TrobosStore>()(
         vehicles: state.vehicles,
         activeVehicleId: state.activeVehicleId,
         selectedDestination: state.selectedDestination,
+        selectedWorkshop: state.selectedWorkshop,
+        carDestinationType: state.carDestinationType,
+        selectedProblemId: state.selectedProblemId,
+        passengerCount: state.passengerCount,
         tripHistory: state.tripHistory,
       }),
     }

@@ -11,6 +11,8 @@ import {
   Lock,
   CheckCircle,
   AlertTriangle,
+  Truck,
+  Wrench,
 } from "lucide-react";
 
 export default function SafetyCenterPage() {
@@ -24,11 +26,11 @@ export default function SafetyCenterPage() {
         <div className="flex items-center gap-2 mb-1">
           <ShieldCheck className="w-6 h-6 text-emerald-600" />
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-            Pusat Keamanan & Proteksi
+            Pusat Keamanan & Proteksi Evakuasi
           </h1>
         </div>
         <p className="text-xs sm:text-sm text-slate-500">
-          Standar keselamatan terverifikasi untuk Anda dan kendaraan Anda.
+          Standar keselamatan derek resmi dan perlindungan komprehensif mobil mogok Anda.
         </p>
       </div>
 
@@ -36,10 +38,10 @@ export default function SafetyCenterPage() {
       <div className="rounded-2xl p-4 bg-red-50 border border-red-200 flex items-center justify-between gap-3">
         <div>
           <div className="text-xs font-bold text-red-900">
-            Butuh Bantuan Darurat di Lokasi?
+            Mobil Mogok di Titik Berbahaya?
           </div>
           <div className="text-[11px] text-red-700">
-            Hubungi pusat komando evakuasi Trobos & pihak berwenang.
+            Hubungi pusat tanggap darurat derek Trobos & patroli jalan raya (PJR).
           </div>
         </div>
         <button
@@ -52,20 +54,20 @@ export default function SafetyCenterPage() {
 
       {/* 4 Pillars of Safety */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-        {/* Driver Verification */}
+        {/* Towing Operator Verification */}
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
           <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <UserCheck className="w-4 h-4" />
+            <Truck className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-bold text-slate-900">
-            Driver Terverifikasi SIM A & SKCK
+            Operator Derek Bersertifikat Resmi
           </h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Mitra driver kami telah melewati verifikasi kartu tanda pengenal resmi, tes mengemudi defensif, dan pemeriksaan latar belakang kepolisian.
+            Mitra derek kami menggunakan truk towing gendong (flatbed) berstandar industri dan operator berlisensi SIM B1 Umum dengan rekam jejak terverifikasi.
           </p>
           <div className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1 pt-1">
             <CheckCircle className="w-3.5 h-3.5" />
-            <span>100% Lolos Uji Kompetensi</span>
+            <span>100% Truk Gendong Flatbed Resmi</span>
           </div>
         </div>
 
@@ -75,10 +77,10 @@ export default function SafetyCenterPage() {
             <FileCheck2 className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-bold text-slate-900">
-            Asuransi All-Risk Rp 1 Miliar
+            Asuransi Derek All-Risk Rp 1 Miliar
           </h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Mobil Anda otomatis terlindungi asuransi komprehensif all-risk sejak serah terima kunci sampai tiba di tujuan.
+            Mobil Anda otomatis terlindungi asuransi komprehensif saat dinaikkan ke truk gendong hingga serah terima di bengkel rekanan.
           </p>
           <div className="text-[11px] text-blue-700 font-semibold flex items-center gap-1 pt-1">
             <CheckCircle className="w-3.5 h-3.5" />
@@ -92,32 +94,46 @@ export default function SafetyCenterPage() {
             <Radio className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-bold text-slate-900">
-            Pelacakan GPS Real-Time Ganda
+            Pelacakan GPS Simultan
           </h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Pantau posisi Anda di motor dan mobil Anda yang dikemudikan Driver secara langsung di peta aplikasi.
+            Pantau posisi perjalanan Anda menuju tujuan serta pergerakan truk derek yang membawa mobil mogok Anda ke bengkel secara real-time.
           </p>
           <div className="text-[11px] text-orange-700 font-semibold flex items-center gap-1 pt-1">
             <CheckCircle className="w-3.5 h-3.5" />
-            <span>Telemetri Lokasi Terenkripsi</span>
+            <span>Dual Tracking Terenkripsi</span>
           </div>
         </div>
 
-        {/* Handover PIN */}
+        {/* Handover PIN & Inspection */}
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
           <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
             <Lock className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-bold text-slate-900">
-            Kode PIN Serah Terima Mobil
+            Kode PIN & Checklist Inspeksi Fisik
           </h3>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Kunci tidak akan diserahkan tanpa pencocokan kode PIN 4-digit unik dan dokumentasi foto kondisi mobil.
+            Mobil tidak akan dinaikkan ke truk tanpa pencocokan kode PIN 4-digit unik dan checklist foto inspeksi kondisi bodi 5 sudut.
           </p>
           <div className="text-[11px] text-indigo-700 font-semibold flex items-center gap-1 pt-1">
             <CheckCircle className="w-3.5 h-3.5" />
-            <span>Protokol Serah Terima 5 Sudut</span>
+            <span>Protokol Verifikasi 5 Sudut</span>
           </div>
+        </div>
+      </div>
+
+      {/* Workshop Partnerships */}
+      <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between text-xs">
+        <div>
+          <div className="text-slate-500 font-medium">Jaringan Bengkel Resmi Rekanan</div>
+          <div className="text-sm font-bold text-slate-900 mt-0.5">
+            Honda Autoland, Toyota Auto2000, & Astra Otoservice 24 Jam
+          </div>
+          <div className="text-slate-500">Menerima unit evakuasi Trobos tanpa antrean prioritas.</div>
+        </div>
+        <div className="text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 font-semibold text-[11px] shrink-0">
+          Prioritas Servis
         </div>
       </div>
 
@@ -143,10 +159,10 @@ export default function SafetyCenterPage() {
               <AlertTriangle className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-black text-slate-900">
-              Pusat Tanggap Darurat Trobos
+              Pusat Tanggap Darurat Mobil Mogok
             </h3>
             <p className="text-xs text-slate-500">
-              Panggilan darurat akan menghubungkan Anda ke Call Center 24 Jam (021-500-888) atau nomor 112.
+              Panggilan darurat akan menghubungkan Anda ke Call Center 24 Jam Rescue Trobos (021-500-888) atau nomor 112.
             </p>
             <div className="space-y-2 pt-2">
               <a
