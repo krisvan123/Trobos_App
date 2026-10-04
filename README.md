@@ -1,30 +1,36 @@
-# Trobos — Emergency Mobility Service
+# Trobos — Layanan Evakuasi & Penyelamatan Mobil Mogok
 
-> **“Trobos. Terobos Macet, Selamatkan Waktu.”**  
-> Solusi evakuasi mobilitas darurat pertama dengan sistem **Tandem** untuk pengendara mobil yang terjebak kemacetan parah di Jakarta.
+> **“Mobil mogok? Tenang. Kami bantu evakuasi mobil dan mengantarkan Anda ke tujuan.”**  
+> Solusi penanganan darurat terpadu: mobil mogok diderek aman ke bengkel rekanan, dan seluruh rombongan penumpang langsung diantar ke tujuan dengan armada pengganti yang disesuaikan.
 
 ---
 
 ## 🚗 Masalah & Solusi
 
 ### Masalah
-Pengguna terjebak kemacetan total dan sedang mengejar waktu penting (penerbangan, rapat direksi, ujian, situasi genting), namun **tidak dapat meninggalkan mobilnya begitu saja di tengah jalan**.
+Mobil pelanggan tiba-tiba mogok di jalan raya atau tidak aman untuk melanjutkan perjalanan. Pelanggan memiliki **dua kebutuhan mendesak sekaligus**:
+1. **Orang / Penumpang**: Harus segera sampai ke tempat tujuan (kantor, rumah, bandara, acara penting).
+2. **Mobil Mogok**: Harus dievakuasi/diderek dengan aman ke bengkel rekanan terpercaya atau lokasi pilihan.
 
-### Solusi Trobos: Sistem Tandem
-Trobos mengerahkan satu unit **Tandem** yang terdiri dari:
-1. **1 Rider Motor**: Membawa Anda menembus kemacetan menuju tujuan dengan cepat.
-2. **1 Driver Mobil**: Mengambil alih kemudi mobil Anda dan membawanya menyusul ke tujuan dengan aman.
-3. **Reuni di Tujuan**: Anda tiba tepat waktu, dan mobil Anda terparkir aman di lokasi yang sama.
+### Solusi Trobos: Penyelamatan Terpadu Simultan
+Trobos mengerahkan unit rescue dalam satu panggilan:
+1. **Truk Towing Gendong Flatbed**: Operator bersertifikasi menderek mobil mogok ke bengkel rekanan resmi (Honda, Toyota, Astra Otoservice).
+2. **Armada Pengganti Dinamis**: Kendaraan pengganti disesuaikan secara otomatis berdasarkan jumlah penumpang:
+   - **1 Orang**: Motor Eksekutif gesit (*Yamaha NMAX*)
+   - **2 Orang**: Mobil Pengganti Sedan/Hatchback (*Toyota Vios*)
+   - **3–4 Orang**: Mobil Pengganti MPV Nyaman (*Toyota Innova Zenix*)
+   - **>4 Orang**: Van Rombongan (*Toyota HiAce Premio*)
+3. **Evakuasi Serentak**: Penumpang tiba tepat waktu di tujuan, mobil ditangani mekanik ahli di bengkel.
 
 ---
 
-## ⚡ Prinsip Desain: "Less UI, More Clarity"
+## ⚡ Prinsip Desain Produk: "Clarity, Speed, and Trust"
 
-Aplikasi dirancang dengan filosofi produk konsumen mobilitas modern (Apple Maps, Gojek, Grab, Wise):
-- **Tenang & Jelas**: Latar belakang putih/terang (*light neutral*), tipografi gelap berjenjang tegas, dan satu aksen oranye darurat yang unmissable.
-- **2-3 Ketukan Saja**: Pengguna dalam kondisi panik/terburu-buru dapat langsung menekan **TROBOS SEKARANG** tanpa formulir berbelit-belit.
-- **Transparansi Ganda**: Pelacakan GPS real-time menampilkan posisi Anda (Motor) vs. Mobil Anda (Driver) secara independen.
-- **Keamanan Terjamin**: Asuransi all-risk hingga Rp 1 Miliar, verifikasi Driver SIM A & SKCK, verifikasi kode PIN 4-digit, dan dokumentasi serah terima 5 titik fisik mobil.
+- **Tenang & Bersih**: Latar belakang putih/abu-abu netral (`#F8FAFC`), tipografi tegas gelap (`#0B0F19`), dan satu warna aksen oranye vermilion fungsional (`#FF4D00`).
+- **Bebas Emoji**: 100% menggunakan ikon Lucide vektor berstandar industri aplikasi mobilitas modern.
+- **Rekomendasi Armada Dinamis**: UI interaktif menghitung jumlah orang di mobil dan menyajikan kapasitas serta alasan pemilihan kendaraan pengganti.
+- **Dual GPS Live Tracking**: Pemantauan real-time dua arah independen: posisi rombongan penumpang vs posisi truk derek mobil.
+- **Keamanan Komprehensif**: Asuransi all-risk hingga Rp 1 Miliar, verifikasi PIN 4-digit, checklist inspeksi bodi 5 sudut sebelum derek, dan kemitraan bengkel resmi.
 
 ---
 
@@ -33,109 +39,64 @@ Aplikasi dirancang dengan filosofi produk konsumen mobilitas modern (Apple Maps,
 - **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
 - **Library**: React 19, TypeScript
 - **Styling**: Tailwind CSS
-- **Icons**: Lucide Icons
-- **Animasi & Interaksi**: Framer Motion
-- **State Machine**: Zustand dengan persistensi lokal (`localStorage`)
-- **Cartography Engine**: Jakarta Vector Interactive Map (Sudirman–SCBD corridor)
+- **Icons**: Lucide React
+- **State Machine**: Zustand 5 dengan persistensi lokal (`localStorage`)
+- **Cartography**: Jakarta Sudirman–SCBD Interactive Vector Map
 
 ---
 
-## 📱 Alur Pengguna (User Flow)
+## 📱 Alur Pengguna (Breakdown Rescue Flow)
 
 ```
-[Layar Utama] 
-   ↓ (Tekan "TROBOS SEKARANG")
-[Konfirmasi Lokasi & Pilihan Tujuan] 
-   ↓ (Konfirmasi Trobos)
-[Pencarian Radar Tandem] 
-   ↓ (Unit Ditemukan)
-[Tandem Menuju Lokasi & Kode PIN Serah Terima] 
-   ↓ (Verifikasi Kode & Checklist 5 Titik Mobil)
-[Perjalanan Dimulai - Dual Tracking: Motor vs Mobil] 
-   ↓ (Anda Tiba & Mobil Menyusul)
-[Reuni di Tujuan & Rating Layanan]
+[Mobil Mogok di Jalan] 
+   ↓ (Tekan "MINTA BANTUAN")
+[Pilih Kendala Mobil & Masukkan Jumlah Penumpang] 
+   ↓ (Sistem tentukan armada pengganti dinamis & bengkel rekanan)
+[Radar Pencarian Unit Rescue] 
+   ↓ (Truk Towing & Armada Pengantar Ditugaskan)
+[Unit Tiba di Lokasi & Verifikasi PIN 4-Digit] 
+   ↓ (Inspeksi Fisik Bodi Mobil & Naik Flatbed)
+[Evakuasi Berjalan Simultan (Dual Tracking)] 
+   ↓ (Penumpang ke Tujuan • Mobil ke Bengkel)
+[Selesai & Rating Layanan]
 ```
 
 ---
 
-## 💻 Cara Menjalankan Secara Lokal
+## 💻 Menjalankan Secara Lokal
 
-### 1. Clone Repository
 ```bash
+# 1. Clone repository
 git clone https://github.com/krisvan123/Trobos_App.git
 cd Trobos_App
-```
 
-### 2. Install Dependensi
-```bash
+# 2. Install dependensi
 npm install
-```
 
-### 3. Jalankan Server Pengembangan
-```bash
+# 3. Jalankan development server
 npm run dev
-```
-Buka browser di [http://localhost:3000](http://localhost:3000).
 
-### 4. Build untuk Produksi
-```bash
+# 4. Build produksi
 npm run build
 npm run start
 ```
 
 ---
 
-## 🌐 Panduan Deployment Produksi (Vercel)
+## 🌐 Status & Panduan Deployment (Vercel)
 
-Aplikasi ini 100% siap di-deploy langsung dari repository GitHub:
+Semua kode terbaru telah di-*push* ke branch `main` di [https://github.com/krisvan123/Trobos_App](https://github.com/krisvan123/Trobos_App).
 
-1. Buka [Vercel Dashboard](https://vercel.com).
-2. Klik **Add New Project** → **Import Git Repository**.
-3. Pilih repository `krisvan123/Trobos_App`.
-4. Framework Preset: **Next.js** (otomatis terdeteksi).
-5. Klik **Deploy**.
+### Jika Repository Sudah Terhubung ke Vercel:
+Vercel secara otomatis mendeteksi setiap commit baru di branch `main` dan menjalankan build produksi secara instan. Anda dapat memantau statusnya di dashboard project Vercel Anda.
 
-### Environment Variables (Opsional untuk integrasi pihak ketiga)
-Jika nantinya dihubungkan dengan API eksternal:
-```env
-# Mapbox / Google Maps (Opsional - saat ini menggunakan engine vektor bawaan)
-NEXT_PUBLIC_MAPBOX_TOKEN=your_token_here
-NEXT_PUBLIC_GOOGLE_MAPS_KEY=your_key_here
-
-# Backend Database (Supabase / Firebase)
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Payment Gateway (Midtrans / Xendit)
-NEXT_PUBLIC_PAYMENT_CLIENT_KEY=your_client_key
-```
+### Jika Belum Dihubungkan ke Vercel:
+1. Buka [https://vercel.com/new](https://vercel.com/new).
+2. Login dengan akun GitHub Anda.
+3. Impor repositori **`krisvan123/Trobos_App`**.
+4. Framework Preset akan otomatis terdeteksi sebagai **Next.js**.
+5. Klik tombol **Deploy** (proses build membutuhkan waktu ~1 menit).
 
 ---
 
-## 📄 Struktur Rute Halaman
-
-| Rute | Deskripsi |
-| :--- | :--- |
-| `/` | Landing page komersial & diagram visual konsep Tandem |
-| `/app` | Layar utama evakuasi darurat, peta interaktif, & booking flow |
-| `/app/trips` | Riwayat perjalanan & struk transaksi |
-| `/app/vehicles` | Kelola mobil terdaftar & verifikasi STNK digital |
-| `/app/safety` | Pusat keamanan, polis asuransi Rp 1 Miliar & tombol SOS |
-| `/app/notifications` | Log notifikasi perjalanan & proteksi |
-| `/app/help` | FAQ accordion & kontak darurat WhatsApp / Call Center 24 Jam |
-| `/app/profile` | Informasi akun & pengaturan |
-| `/driver` | Mode mitra pengemudi (Online/Offline & penerimaan order darurat) |
-| `/login` | Masuk akun |
-| `/register` | Pendaftaran akun & 3-step onboarding singkat |
-| `/forgot-password` | Pemulihan password |
-
----
-
-## 🎯 Mode Presentasi & Simulasi (Demo Controller)
-Pada layar aplikasi (`/app`), terdapat widget mengambang **Mode Simulasi** di sudut kanan bawah. Anda dapat:
-- Menjalankan simulasi otomatis seluruh alur dari penjemputan hingga reuni (*Simulate Trobos*).
-- Melompat langsung ke status mana pun (Pencarian, Handover, Dual Journey, Selesai) untuk demonstrasi kepada audiens atau investor.
-
----
-
-© 2026 Trobos Mobility Indonesia. All rights reserved.
+© 2026 Trobos Rescue Indonesia. All rights reserved.
